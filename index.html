@@ -1,226 +1,221 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surat Terakhir Arifin</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Quicksand:wght@300;500&family=Tangerine:wght@700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08090d">
+  <meta name="description" content="XREXZOB STUDIO - Audio Developer">
+  <link rel="icon" href="logo.jpeg">
 
-        body {
-            background-color: #050505;
-            color: #d1d1d1;
-            font-family: 'Quicksand', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            text-align: center;
-            padding: 20px;
-        }
+  <title>XREXZOB STUDIO — Audio Developer</title>
 
-        .container {
-            width: 100%;
-            max-width: 850px;
-            padding: 20px;
-        }
-
-        /* --- Navigasi Atas --- */
-        .nav-buttons {
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            opacity: 0;
-            transition: opacity 1s;
-        }
-
-        .nav-btn {
-            padding: 12px 15px;
-            background: transparent;
-            border: 1px solid #333;
-            color: #888;
-            cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            transition: 0.5s;
-            text-transform: uppercase;
-            flex: 1;
-            max-width: 200px;
-        }
-
-        .nav-btn.active {
-            border-color: #fff;
-            color: #fff;
-            background: rgba(255,255,255,0.05);
-        }
-
-        /* --- Area Foto --- */
-        #photo-container {
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto 30px auto;
-            border-radius: 10px;
-            overflow: hidden;
-            display: none;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
-            border: 1px solid #222;
-        }
-
-        #display-photo {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: opacity 0.5s;
-        }
-
-        /* --- Teks Pesan --- */
-        #text-container {
-            font-family: 'Lora', serif;
-            font-size: 1.1rem;
-            line-height: 2.2;
-            min-height: 500px;
-            white-space: pre-wrap;
-            font-style: italic;
-            text-align: left;
-            padding: 0 10px;
-        }
-
-        .signature {
-            margin-top: 50px;
-            font-family: 'Tangerine', cursive;
-            font-size: 3.5rem;
-            color: #fff;
-            opacity: 0;
-            transition: opacity 3s;
-        }
-
-        .timestamp {
-            margin-top: 20px;
-            font-size: 0.75rem;
-            color: #444;
-            opacity: 0;
-            transition: opacity 2s;
-        }
-
-        #cursor {
-            display: inline-block;
-            width: 1.5px;
-            height: 1.1rem;
-            background-color: #fff;
-            animation: blink 0.8s infinite;
-        }
-
-        @keyframes blink { 50% { opacity: 0; } }
-        .hidden { display: none !important; }
-        
-        #start-btn {
-            padding: 20px 40px;
-            background: transparent;
-            border: 1px solid #fff;
-            color: #fff;
-            cursor: pointer;
-            letter-spacing: 2px;
-            font-family: 'Quicksand', sans-serif;
-            transition: 0.5s;
-        }
-
-        #start-btn:hover {
-            background: #fff;
-            color: #000;
-        }
-    </style>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <div id="start-screen">
-        <button id="start-btn" onclick="startApp()">BUKA PESAN TERAKHIR ARIFIN</button>
-    </div>
+  <!-- LOADING SCREEN -->
+  <div id="loadingScreen">
+    <div class="loader-box">
+      <div class="logo-ring">
+        <img src="logo.jpeg" alt="XREXZOB">
+      </div>
 
-    <div class="container hidden" id="main-content">
-        <div class="nav-buttons" id="nav-btns">
-            <button id="btn1" class="nav-btn" onclick="switchTab(1)">Pesan buat Raisya</button>
-            <button id="btn2" class="nav-btn" onclick="switchTab(2)">Pesan buat Bapak & Keluarga</button>
+      <div class="loading-title">XREXZOB STUDIO</div>
+      <div class="loading-subtitle">AUDIO DEVELOPER</div>
+
+      <div class="loading-bar">
+        <div class="loading-progress"></div>
+      </div>
+
+      <div class="loading-text">INITIALIZING STUDIO...</div>
+    </div>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div class="bg">
+    <div class="grid"></div>
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <div class="orb orb-three"></div>
+  </div>
+
+  <main class="container">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-logo">
+          <img src="logo.jpeg" alt="XREXZOB">
         </div>
 
-        <div id="photo-container">
-            <img id="display-photo" src="" alt="Kenangan">
+        <div>
+          <h1>XREXZOB <span>STUDIO</span></h1>
+          <p>AUDIO DEVELOPER</p>
+        </div>
+      </div>
+
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        ONLINE
+      </div>
+    </header>
+
+    <!-- MAIN CARD -->
+    <section class="studio-card">
+
+      <div class="section-title">
+        <div class="title-icon">♫</div>
+        <div>
+          <h2>Audio Speed Studio</h2>
+          <p>Process audio directly in your browser</p>
+        </div>
+      </div>
+
+      <!-- UPLOAD -->
+      <div id="dropZone" class="drop-zone">
+
+        <input
+          type="file"
+          id="audioInput"
+          accept=".mp3,.wav,audio/mpeg,audio/wav,audio/x-wav"
+          hidden
+        >
+
+        <div class="upload-icon">↑</div>
+
+        <h3>DROP AUDIO HERE</h3>
+        <p>atau klik untuk memilih file</p>
+
+        <div class="formats">
+          MP3 <span>•</span> WAV
+        </div>
+      </div>
+
+      <!-- FILE INFO -->
+      <div id="fileBox" class="file-box hidden">
+
+        <div class="file-icon">♫</div>
+
+        <div class="file-details">
+          <div id="fileName" class="file-name">audio.mp3</div>
+          <div id="fileInfo" class="file-info">0 MB</div>
         </div>
 
-        <div id="text-container"><span id="typed-text"></span><span id="cursor"></span></div>
-        
-        <div class="signature" id="signature">Muhammad Arifin</div>
-        <div class="timestamp" id="timestamp"></div>
-    </div>
+        <button id="removeFile" class="remove-btn">×</button>
 
-    <audio id="sad-music" loop>
-        <source src="sedih.mp3" type="audio/mpeg">
-    </audio>
+      </div>
 
-    <script>
-        // PESAN UNTUK RAISYA (TETAP SAMA)
-        const message1 = "Sayang, mungkin saat pesan ini muncul di hadapanmu, aku sudah tidak lagi bisa mendengar suaramu atau menggenggam tanganmu...\n\nMenulis ini rasanya berat, tapi aku ingin kamu tahu betapa berartinya kehadiranmu bagiku. Seandainya takdir memaksaku untuk pergi lebih dulu—entah karena sakit yang selama ini aku tahan, atau karena alasan lain yang menjadi rahasia Tuhan—aku ingin kamu tetap tegar menghadapi dunia.\n\nTolong, jaga dirimu baik-baik ya? Makanlah dengan teratur, istirahatlah yang cukup, dan jangan biarkan kesedihan menyelimuti harimu terlalu lama. Aku tahu mungkin akan sulit, tapi aku ingin melihatmu terus berjalan. \n\nKalau suatu hari nanti kamu merasa sangat rindu, kalau beban hidup terasa terlalu berat, atau jika kamu sekadar ingin bercerita tentang harimu... janganlah kamu merasa sendirian. Datanglah kepada Allah, bersujudlah dalam sholatmu. Ceritakan semuanya di sana. Aku selalu berharap, melalui perantara doa dan sujudmu, aku bisa tetap merasakan kehadiranmu dan mendengar setiap keluh kesahmu dari tempatku yang baru.\n\nAku ingin kamu menjadi sosok yang luar biasa. Rajinlah sholat, jangan pernah tinggalkan kewajibanmu pada Sang Pencipta. Berdoalah selalu untuk kesuksesanmu di dunia dan akhirat. Demi Tuhan, melihat kamu tetap istiqomah, tetap berjuang, dan tetap tersenyum dalam ketaatan sudah cukup membuat aku menjadi lelaki paling bangga yang pernah memilikimu.\n\nMaafkan aku, sayang... Maaf jika kehadiranku selama ini hanya memberikan beban. Maaf karena aku belum bisa jadi yang terbaik, belum bisa membahagiakanmu sepenuhnya, dan maaf karena aku tidak bisa menemanimu sampai kita menua bersama. Jika waktu bisa aku hentikan, aku hanya ingin tetap di sini, menjaga dan mencintaimu.\n\nNamun jika perpisahan ini adalah garisnya, ingatlah bahwa kamu pernah dicintai oleh seseorang dengan sangat tulus. Terima kasih sudah menemaniku di masa-masa sulit maupun senang. Sukseslah untuk masa depanmu, kejar semua mimpi kita yang belum sempat aku wujudkan bersamamu. Aku menyayangimu selamanya, lebih dari sekadar kata-kata yang bisa aku tuliskan di sini.";
+      <!-- AUDIO PREVIEW -->
+      <div id="previewBox" class="preview-box hidden">
 
-        // PESAN UNTUK KELUARGA (VERSI JAUH LEBIH PANJANG)
-        const message2 = "Untuk seluruh keluarga besarku yang kucintai, terutama untuk Bapak...\n\nPak, Arifin menulis ini dengan rasa sesak di dada. Maafkan Arifin ya, Pak. Maaf kalau selama ini Arifin hanya bisa merepotkan, menambah beban pikiran, dan belum sempat membalas satu tetes pun keringat perjuangan Bapak. Arifin tahu benar bagaimana Bapak membanting tulang siang dan malam, menahan lelah demi menghidupi Arifin dan keluarga. Arifin merasa sangat berdosa karena harus pergi tanpa bisa memberikan kebanggaan yang Bapak harapkan.\n\nTerima kasih sudah menjadi sosok pahlawan yang luar biasa kuat. Terima kasih sudah sabar menghadapi Arifin yang banyak kekurangan ini. Tolong Pak, maafkan segala kesalahan Arifin, segala bantahan, atau sikap yang pernah melukai hati Bapak. Arifin sayang banget sama Bapak, meski mungkin Arifin jarang mengucapkannya secara langsung. Tolong ikhlaskan Arifin ya, Pak. Jangan tangisi kepergian Arifin terlalu dalam, Arifin ingin Bapak tetap kuat.\n\nUntuk saudara-saudaraku semuanya, maafkan aku jika selama hidupku aku belum bisa menjadi saudara yang bisa kalian andalkan. Maaf jika kehadiranku justru seringkali menambah beban pikiran kalian. Aku sangat berterima kasih karena kalian sudah mau menerima dan tetap menyayangiku apa adanya sampai detik ini. \n\nArifin titip Bapak ya... Tolong jaga beliau baik-baik. Jangan biarkan beliau merasa sendirian atau kesepian. Tetaplah rukun, saling menjaga, dan jangan pernah putus tali persaudaraan hanya karena aku sudah tidak ada. Arifin sayang kalian semua. Maafkan segala khilafku, dan tolong kirimkan doa di setiap sujud kalian agar Arifin tenang di sana. Terima kasih sudah menjadi keluarga terbaik yang pernah Arifin miliki.";
+        <div class="preview-label">
+          <span>PREVIEW</span>
+          <span id="durationLabel">00:00</span>
+        </div>
 
-        let currentTab = 0;
-        let typingTimeout;
-        const music = document.getElementById('sad-music');
-        const typedTextElement = document.getElementById('typed-text');
-        const photoContainer = document.getElementById('photo-container');
-        const displayPhoto = document.getElementById('display-photo');
+        <audio id="audioPreview" controls></audio>
 
-        function startApp() {
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('main-content').classList.remove('hidden');
-            document.getElementById('nav-btns').style.opacity = "1";
-            photoContainer.style.display = "block";
-            music.play();
-            updateTime();
-            switchTab(1);
-        }
+      </div>
 
-        function switchTab(tabNum) {
-            if (currentTab === tabNum) return;
-            currentTab = tabNum;
-            clearTimeout(typingTimeout);
-            typedTextElement.textContent = "";
-            document.getElementById('cursor').style.display = 'inline-block';
-            document.getElementById('signature').style.opacity = "0";
-            document.getElementById('timestamp').style.opacity = "0";
-            document.getElementById('btn1').className = (tabNum === 1 ? "nav-btn active" : "nav-btn");
-            document.getElementById('btn2').className = (tabNum === 2 ? "nav-btn active" : "nav-btn");
+      <!-- SPEED -->
+      <div class="speed-section">
 
-            displayPhoto.style.opacity = "0";
-            setTimeout(() => {
-                displayPhoto.src = (tabNum === 1 ? "2.jpg" : "keluarga.jpg");
-                displayPhoto.style.opacity = "1";
-            }, 300);
+        <div class="section-heading">
+          <div>
+            <h3>Speed Preset</h3>
+            <p>Pilih multiplier audio</p>
+          </div>
 
-            const textToType = (tabNum === 1 ? message1 : message2);
-            typeWriter(textToType, 0);
-        }
+          <div id="selectedSpeed" class="selected-speed">
+            1.00x
+          </div>
+        </div>
 
-        function typeWriter(text, index) {
-            if (index < text.length) {
-                typedTextElement.textContent += text.charAt(index);
-                typingTimeout = setTimeout(() => typeWriter(text, index + 1), 60);
-            } else {
-                document.getElementById('cursor').style.display = 'none';
-                document.getElementById('signature').style.opacity = "1";
-                document.getElementById('timestamp').style.opacity = "1";
-            }
-        }
+        <div class="preset-grid">
 
-        function updateTime() {
-            const now = new Date();
-            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            document.getElementById('timestamp').textContent = `Tertulis pada: ${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} | ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} WIB`;
-        }
-    </script>
+          <button class="preset" data-speed="2.32">
+            <strong>PRESET 1</strong>
+            <span>2.32x</span>
+            <small>Roblox 0.43</small>
+          </button>
+
+          <button class="preset" data-speed="2.00">
+            <strong>PRESET 2</strong>
+            <span>2.00x</span>
+            <small>Roblox 0.50</small>
+          </button>
+
+          <button class="preset" data-speed="1.54">
+            <strong>PRESET 3</strong>
+            <span>1.54x</span>
+            <small>Roblox 0.65</small>
+          </button>
+
+          <button class="preset" data-speed="1.25">
+            <strong>PRESET 4</strong>
+            <span>1.25x</span>
+            <small>Roblox 0.80</small>
+          </button>
+
+          <button class="preset active" data-speed="1.00">
+            <strong>PRESET 5</strong>
+            <span>1.00x</span>
+            <small>Standard</small>
+          </button>
+
+          <button id="customBtn" class="preset custom">
+            <strong>CUSTOM</strong>
+            <span>⚙</span>
+            <small>Custom multiplier</small>
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- PROCESS -->
+      <div class="process-section">
+
+        <button id="processBtn" class="process-btn" disabled>
+
+          <span class="process-icon">⚡</span>
+
+          <span>
+            <strong>PROSES & DOWNLOAD AUDIO</strong>
+            <small>Local browser processing</small>
+          </span>
+
+          <span class="arrow">→</span>
+
+        </button>
+
+        <div class="progress-area">
+
+          <div class="progress-top">
+            <span id="statusText">READY</span>
+            <span id="progressPercent">0%</span>
+          </div>
+
+          <div class="progress-track">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div>© 2026 XREXZOB STUDIO</div>
+      <div>Audio Developer • Browser Processing</div>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+
 </body>
 </html>
