@@ -362,15 +362,6 @@ async function processAudio() {
 
   const inputLength = audioBuffer.length;
 
-  /*
-    Speed lebih cepat = durasi output lebih pendek.
-
-    Contoh:
-    2x speed
-    10 detik input
-    = sekitar 5 detik output
-  */
-
   const outputLength =
     Math.max(
       1,
@@ -411,10 +402,10 @@ async function processAudio() {
     await offlineContext.startRendering();
 
   setProgress(75);
-  statusText.textContent = "ENCODING WAV";
+  statusText.textContent = "ENCODING OGG";
 
-  const wavBlob =
-    audioBufferToWav(renderedBuffer);
+  // Konversi buffer ke WebM/OGG Blob menggunakan MediaRecorder API bawaan browser
+  const oggBlob = await audioBufferToOgg(renderedBuffer);
 
   setProgress(90);
   statusText.textContent = "CREATING DOWNLOAD";
@@ -429,10 +420,10 @@ async function processAudio() {
       .replace(".", "_");
 
   const outputName =
-    `${baseName}_xrexzob_${speedText}x.wav`;
+    `${baseName}_xrexzob_${speedText}x.ogg`;
 
   downloadBlob(
-    wavBlob,
+    oggBlob,
     outputName
   );
 
@@ -441,6 +432,44 @@ async function processAudio() {
   statusText.textContent =
     "COMPLETE • DOWNLOAD STARTED";
 
+}
+
+
+/* =========================================================
+   OGG ENCODER (Menggunakan MediaStreamDestination & MediaRecorder)
+   ========================================================= */
+
+async function audioBufferToOgg(buffer) {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const dest = audioCtx.createMediaStreamDestination();
+  const source = audioCtx.createBufferSource();
+  
+  source.buffer = buffer;
+  source.connect(dest);
+  
+  // Pilih mimeType OGG jika didukung browser, fallback ke webm jika tidak
+  const options = { mimeType: 'audio/ogg;codecs=opus' };
+  const mediaRecorder = new MediaRecorder(dest.stream, MediaRecorder.isTypeSupported('audio/ogg;codecs=opus') ? options : { mimeType: 'audio/webm;codecs=opus' });
+  
+  const chunks = [];
+  mediaRecorder.ondataavailable = e => chunks.push(e.data);
+  
+  return new Promise((resolve) => {
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(chunks, { type: 'audio/ogg' });
+      audioCtx.close();
+      resolve(blob);
+    };
+
+    mediaRecorder.start();
+    source.start(0);
+    
+    // Hentikan perekaman otomatis setelah durasi buffer selesai
+    setTimeout(() => {
+      mediaRecorder.stop();
+      source.stop();
+    }, (buffer.duration * 1000) + 100);
+  });
 }
 
 
@@ -488,213 +517,6 @@ function downloadBlob(blob, filename) {
   setTimeout(() => {
     URL.revokeObjectURL(url);
   }, 2000);
-
-}
-
-
-/* =========================================================
-   WAV ENCODER
-   ========================================================= */
-
-function audioBufferToWav(buffer) {
-
-  const numberOfChannels =
-    buffer.numberOfChannels;
-
-  const sampleRate =
-    buffer.sampleRate;
-
-  const format = 1;
-  const bitDepth = 16;
-
-  const channelData = [];
-
-  for (
-    let channel = 0;
-    channel < numberOfChannels;
-    channel++
-  ) {
-
-    channelData.push(
-      buffer.getChannelData(channel)
-    );
-
-  }
-
-  const samples =
-    buffer.length;
-
-  const blockAlign =
-    numberOfChannels *
-    bitDepth / 8;
-
-  const byteRate =
-    sampleRate *
-    blockAlign;
-
-  const dataSize =
-    samples *
-    blockAlign;
-
-  const bufferSize =
-    44 + dataSize;
-
-  const arrayBuffer =
-    new ArrayBuffer(bufferSize);
-
-  const view =
-    new DataView(arrayBuffer);
-
-
-  /* RIFF */
-
-  writeString(
-    view,
-    0,
-    "RIFF"
-  );
-
-  view.setUint32(
-    4,
-    36 + dataSize,
-    true
-  );
-
-  writeString(
-    view,
-    8,
-    "WAVE"
-  );
-
-
-  /* fmt */
-
-  writeString(
-    view,
-    12,
-    "fmt "
-  );
-
-  view.setUint32(
-    16,
-    16,
-    true
-  );
-
-  view.setUint16(
-    20,
-    format,
-    true
-  );
-
-  view.setUint16(
-    22,
-    numberOfChannels,
-    true
-  );
-
-  view.setUint32(
-    24,
-    sampleRate,
-    true
-  );
-
-  view.setUint32(
-    28,
-    byteRate,
-    true
-  );
-
-  view.setUint16(
-    32,
-    blockAlign,
-    true
-  );
-
-  view.setUint16(
-    34,
-    bitDepth,
-    true
-  );
-
-
-  /* data */
-
-  writeString(
-    view,
-    36,
-    "data"
-  );
-
-  view.setUint32(
-    40,
-    dataSize,
-    true
-  );
-
-
-  /* PCM */
-
-  let offset = 44;
-
-  for (let i = 0; i < samples; i++) {
-
-    for (
-      let channel = 0;
-      channel < numberOfChannels;
-      channel++
-    ) {
-
-      let sample =
-        channelData[channel][i];
-
-      sample =
-        Math.max(
-          -1,
-          Math.min(1, sample)
-        );
-
-      const intSample =
-        sample < 0
-          ? sample * 0x8000
-          : sample * 0x7FFF;
-
-      view.setInt16(
-        offset,
-        intSample,
-        true
-      );
-
-      offset += 2;
-
-    }
-
-  }
-
-  return new Blob(
-    [arrayBuffer],
-    {
-      type: "audio/wav"
-    }
-  );
-
-}
-
-
-/* =========================================================
-   WRITE STRING
-   ========================================================= */
-
-function writeString(view, offset, string) {
-
-  for (let i = 0; i < string.length; i++) {
-
-    view.setUint8(
-      offset + i,
-      string.charCodeAt(i)
-    );
-
-  }
 
 }
 
