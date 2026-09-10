@@ -7,7 +7,10 @@
     <title>Roblox Audio Converter</title>
     <script>
       // Pinned to a verified encoder repository commit so the client-only build remains reproducible.
-      window.OggVorbisEncoderConfig = { memoryInitializerPrefixURL: "" };
+      window.OggVorbisEncoderConfig = {
+        memoryInitializerPrefixURL:
+          "https://cdn.jsdelivr.net/gh/higuma/ogg-vorbis-encoder-js@7a872423f416e330e925f5266d2eb66cff63c1b6/lib/",
+      };
     </script>
     <script
       src="https://cdn.jsdelivr.net/gh/higuma/ogg-vorbis-encoder-js@7a872423f416e330e925f5266d2eb66cff63c1b6/lib/OggVorbisEncoder.min.js"
