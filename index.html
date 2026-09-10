@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#090609" />
-    <title>XREXZOB BYPASS AUDIO </title>
+    <title>XREXZOB BYPASS AUDIO Roblox</title>
     <script>
       // Pinned to a verified encoder repository commit so the client-only build remains reproducible.
       window.OggVorbisEncoderConfig = {
@@ -182,15 +182,30 @@
       .browse { border: 1px solid rgba(255, 68, 88, .48); border-radius: 9px; padding: 9px 13px; background: rgba(255, 43, 67, .12); color: var(--cyan); font-size: 12px; font-weight: 750; }
       .browse:hover { background: rgba(255, 43, 67, .22); }
       #fileInput { display: none; }
-      .file-card { display: none; align-items: center; gap: 12px; margin-top: 14px; padding: 13px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.035); }
-      .file-card.visible { display: flex; }
+      .file-list { display: grid; gap: 10px; max-height: 330px; overflow-y: auto; margin-top: 14px; padding-right: 2px; }
+      .file-list:empty { display: none; }
+      .file-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 11px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.035); animation: listIn .35s ease both; }
+      @keyframes listIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
       .file-icon { width: 34px; height: 34px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 10px; color: var(--orange); background: rgba(255,155,92,.12); }
       .file-icon svg { width: 17px; }
       .file-meta { min-width: 0; flex: 1; }
       .file-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 700; }
       .file-size { margin-top: 4px; color: var(--muted); font-size: 11px; }
+      .file-status { display: flex; align-items: center; gap: 6px; margin-top: 7px; color: var(--muted); font-size: 10px; }
+      .file-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 10px currentColor; }
+      .file-card.processing { border-color: rgba(255, 68, 88, .55); background: rgba(255, 43, 67, .075); }
+      .file-card.processing .file-status { color: var(--cyan); }
+      .file-card.done .file-status { color: #7ee6b1; }
+      .file-card.error .file-status { color: var(--danger); }
+      .item-progress { width: 100%; height: 4px; margin-top: 8px; overflow: hidden; border-radius: 99px; background: rgba(255,255,255,.08); }
+      .item-progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--cyan-2), var(--cyan), var(--orange)); transition: width .2s ease; }
       .remove-file { display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 8px; color: var(--muted); background: transparent; }
       .remove-file:hover { color: var(--danger); background: rgba(255,113,139,.1); }
+      .remove-file:disabled { cursor: not-allowed; opacity: .35; }
+      .queue-actions { display: none; align-items: center; justify-content: space-between; gap: 12px; margin-top: 11px; color: var(--muted); font-size: 11px; }
+      .queue-actions.visible { display: flex; }
+      .clear-queue { border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; color: var(--muted); background: rgba(255,255,255,.035); font-size: 10px; font-weight: 800; }
+      .clear-queue:hover { color: var(--text); border-color: rgba(255, 68, 88, .55); background: rgba(255, 43, 67, .08); }
 
       .speed-panel { height: 100%; }
       .speed-copy { margin: -3px 0 18px; color: var(--muted); font-size: 12px; line-height: 1.5; }
@@ -227,13 +242,18 @@
       .result { display: none; margin-top: 16px; }
       .result.visible { display: block; }
       .result h3 { margin: 0 0 13px; font-size: 15px; }
-      .specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-      .spec { padding: 11px; border: 1px solid var(--line); border-radius: 11px; background: rgba(255,255,255,.03); }
-      .spec span { display: block; color: var(--muted); font-size: 10px; }
-      .spec strong { display: block; margin-top: 5px; font-size: 12px; }
-      audio { width: 100%; height: 40px; margin-top: 14px; filter: invert(.91) hue-rotate(320deg) saturate(.9); }
-      .download { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; margin-top: 12px; padding: 12px; border: 1px solid rgba(255,155,92,.42); border-radius: 11px; color: var(--orange); background: rgba(255,155,92,.08); font-size: 12px; font-weight: 850; text-decoration: none; }
-      .download:hover { background: rgba(255,155,92,.15); }
+      .result-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+      .summary-card { padding: 11px; border: 1px solid var(--line); border-radius: 11px; background: rgba(255,255,255,.03); }
+      .summary-card span { display: block; color: var(--muted); font-size: 10px; }
+      .summary-card strong { display: block; margin-top: 5px; font-size: 14px; }
+      .result-list { display: grid; gap: 11px; }
+      .result-item { padding: 13px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(135deg, rgba(255, 43, 67, .065), rgba(255,255,255,.025)); }
+      .result-item-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+      .result-item-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 800; }
+      .result-item-meta { margin-top: 4px; color: var(--muted); font-size: 10px; }
+      audio { width: 100%; height: 38px; margin-top: 11px; filter: invert(.91) hue-rotate(320deg) saturate(.9); }
+      .download { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; margin-top: 10px; padding: 10px; border: 1px solid rgba(255,128,109,.42); border-radius: 10px; color: var(--orange); background: rgba(255,128,109,.08); font-size: 11px; font-weight: 850; text-decoration: none; }
+      .download:hover { background: rgba(255,128,109,.16); }
       .download svg { width: 16px; }
       .footer-note { display: flex; align-items: center; gap: 7px; margin-top: 18px; color: var(--muted); font-size: 11px; }
       .footer-note svg { width: 14px; color: var(--cyan); }
@@ -247,7 +267,7 @@
         .dropzone { min-height: 190px; }
       }
       @media (max-width: 370px) {
-        .specs { grid-template-columns: repeat(2, 1fr); }
+        .result-summary { grid-template-columns: repeat(2, 1fr); }
         .presets { grid-template-columns: repeat(2, 1fr); }
       }
     </style>
@@ -261,7 +281,7 @@
               <path d="M4 12h3l2.2-6 4.6 12 2.2-6H20"/><path d="M7 4h10"/>
             </svg>
           </div>
-          <div><div class="eyebrow">Local audio tool</div><h1>XREXZOB Bypass Audio </h1></div>
+          <div><div class="eyebrow">Local audio tool</div><h1>XREXZOB BYPASS Audio </h1></div>
         </div>
         <div class="privacy">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -272,36 +292,34 @@
       <section class="hero">
         <div class="eyebrow">MP3 / WAV / OGG → OGG Vorbis</div>
         <h2>Siapkan audio untuk Roblox,<br /><span>tanpa upload ke server.</span></h2>
-        <p>Atur kecepatan, konversi langsung dari browser, lalu dengarkan dan simpan hasilnya. File Anda tetap lokal.</p>
+        <p>Masukkan banyak lagu, atur satu speed untuk semuanya, konversi langsung dari browser, lalu preview dan download hasilnya. Semua file tetap lokal.</p>
       </section>
 
       <section class="grid">
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><span class="number">01</span> Upload audio</div>
-            <span class="format-chip">CLIENT-SIDE</span>
+            <span class="format-chip" id="queueCount">0 FILE</span>
           </div>
-          <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Pilih file audio">
+          <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Pilih beberapa file audio">
             <div>
               <div class="upload-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg>
               </div>
-              <strong>Tarik file audio ke sini</strong>
-              <p>MP3, WAV, OGG, M4A, AAC, atau FLAC</p>
-              <button class="browse" id="browseButton" type="button">PILIH FILE</button>
+              <strong>Tarik beberapa file audio ke sini</strong>
+              <p>MP3, WAV, OGG, M4A, AAC, atau FLAC • maksimal 30 file</p>
+              <button class="browse" id="browseButton" type="button">PILIH BANYAK FILE</button>
             </div>
-            <input id="fileInput" type="file" accept=".mp3,.wav,.ogg,.m4a,.aac,.flac,audio/*" />
+            <input id="fileInput" type="file" multiple accept=".mp3,.wav,.ogg,.m4a,.aac,.flac,audio/*" />
           </div>
-          <div class="file-card" id="fileCard">
-            <div class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M13 2v7h7"/></svg></div>
-            <div class="file-meta"><div class="file-name" id="fileName"></div><div class="file-size" id="fileSize"></div></div>
-            <button class="remove-file" id="removeFile" type="button" aria-label="Hapus file">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
-            </button>
+          <div class="file-list" id="fileList" aria-live="polite"></div>
+          <div class="queue-actions" id="queueActions">
+            <span id="queueSummary">Belum ada file</span>
+            <button class="clear-queue" id="clearQueue" type="button">BERSIHKAN</button>
           </div>
           <button class="convert" id="convertButton" type="button" disabled>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 9-12h-7z"/></svg>
-            KONVERSI KE OGG
+            <span id="convertLabel">KONVERSI SEMUA</span>
           </button>
           <div class="progress-wrap" id="progressWrap">
             <div class="progress-label"><span id="progressText">Menyiapkan audio…</span><strong id="progressPercent">0%</strong></div>
@@ -328,57 +346,59 @@
           <div class="active-speed"><span>Speed terpilih</span><strong id="activeSpeed">1.00x</strong></div>
           <div class="footer-note">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v5c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
-            <span>Optimized untuk audio Roblox</span>
+            <span>Batch processing lokal • optimized untuk audio Roblox</span>
           </div>
         </aside>
       </section>
 
       <section class="panel result" id="result">
-        <div class="panel-header"><div class="panel-title"><span class="number">03</span> Hasil konversi</div><span class="format-chip">READY</span></div>
-        <h3 id="resultFileName">Audio hasil</h3>
-        <div class="specs">
-          <div class="spec"><span>Format</span><strong id="specFormat">audio/ogg</strong></div>
-          <div class="spec"><span>Sample rate</span><strong id="specRate">—</strong></div>
-          <div class="spec"><span>Channels</span><strong id="specChannels">—</strong></div>
-          <div class="spec"><span>Durasi</span><strong id="specDuration">—</strong></div>
-          <div class="spec"><span>Ukuran file</span><strong id="specSize">—</strong></div>
-          <div class="spec"><span>Speed</span><strong id="specSpeed">—</strong></div>
+        <div class="panel-header"><div class="panel-title"><span class="number">03</span> Hasil konversi</div><span class="format-chip">BATCH READY</span></div>
+        <div class="result-summary">
+          <div class="summary-card"><span>Berhasil</span><strong id="resultCount">0 file</strong></div>
+          <div class="summary-card"><span>Total ukuran</span><strong id="resultSize">—</strong></div>
+          <div class="summary-card"><span>Speed</span><strong id="resultSpeed">—</strong></div>
         </div>
-        <audio id="audioPreview" controls preload="metadata"></audio>
-        <a class="download" id="downloadButton" href="#" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-          DOWNLOAD OGG
-        </a>
+        <div class="result-list" id="resultList"></div>
       </section>
     </main>
 
     <script>
       (() => {
         const allowedExtensions = ["mp3", "wav", "ogg", "m4a", "aac", "flac"];
+        const maxFiles = 30;
         const dropzone = document.getElementById("dropzone");
         const input = document.getElementById("fileInput");
         const browse = document.getElementById("browseButton");
-        const fileCard = document.getElementById("fileCard");
-        const fileName = document.getElementById("fileName");
-        const fileSize = document.getElementById("fileSize");
-        const removeFile = document.getElementById("removeFile");
+        const fileList = document.getElementById("fileList");
+        const queueActions = document.getElementById("queueActions");
+        const queueCount = document.getElementById("queueCount");
+        const queueSummary = document.getElementById("queueSummary");
+        const clearQueue = document.getElementById("clearQueue");
         const convert = document.getElementById("convertButton");
+        const convertLabel = document.getElementById("convertLabel");
         const message = document.getElementById("message");
         const progressWrap = document.getElementById("progressWrap");
         const progressFill = document.getElementById("progressFill");
         const progressText = document.getElementById("progressText");
         const progressPercent = document.getElementById("progressPercent");
         const result = document.getElementById("result");
+        const resultList = document.getElementById("resultList");
+        const resultCount = document.getElementById("resultCount");
+        const resultSize = document.getElementById("resultSize");
+        const resultSpeed = document.getElementById("resultSpeed");
         const customSpeed = document.getElementById("customSpeed");
         const activeSpeed = document.getElementById("activeSpeed");
         const useSpeed = document.getElementById("useSpeed");
-        let selectedFile = null;
+        let queue = [];
+        let outputs = [];
         let speed = 1;
-        let outputUrl = null;
-        let outputFileName = "";
+        let nextId = 1;
+        let processing = false;
 
-        const $ = (id) => document.getElementById(id);
-        const setMessage = (text, isError = false) => { message.textContent = text; message.className = `message${isError ? " error" : ""}`; };
+        const setMessage = (text, isError = false) => {
+          message.textContent = text;
+          message.className = `message${isError ? " error" : ""}`;
+        };
         const formatBytes = (bytes) => {
           if (!bytes) return "0 B";
           const units = ["B", "KB", "MB", "GB"];
@@ -391,6 +411,9 @@
           return `${mins}:${secs}`;
         };
         const formatSpeed = (value) => `${Number(value).toFixed(2)}x`;
+        const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+        }[char]));
         const setProgress = (value, text) => {
           const percent = Math.max(0, Math.min(100, Math.round(value)));
           progressFill.style.width = `${percent}%`;
@@ -405,7 +428,9 @@
             button.classList.toggle("active", Number(button.dataset.speed) === speed);
           });
         }
-        document.querySelectorAll(".speed-option").forEach((button) => button.addEventListener("click", () => selectSpeed(button.dataset.speed)));
+        document.querySelectorAll(".speed-option").forEach((button) => {
+          button.addEventListener("click", () => selectSpeed(button.dataset.speed));
+        });
         useSpeed.addEventListener("click", () => {
           const value = Number(customSpeed.value);
           if (!Number.isFinite(value) || value <= 0) {
@@ -414,52 +439,141 @@
             return;
           }
           selectSpeed(value);
-          setMessage(`Custom speed ${formatSpeed(value)} siap digunakan.`);
+          setMessage(`Custom speed ${formatSpeed(value)} siap digunakan untuk semua file.`);
         });
 
-        function acceptFile(file) {
-          if (!file) return;
-          const extension = file.name.toLowerCase().split(".").pop();
-          if (!allowedExtensions.includes(extension)) {
-            setMessage("Format file tidak didukung. Pilih MP3, WAV, OGG, M4A, AAC, atau FLAC.", true);
+        function renderQueue() {
+          fileList.innerHTML = queue.map((item) => `
+            <div class="file-card ${item.statusKey}" data-id="${item.id}">
+              <div class="file-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M13 2v7h7"/></svg>
+              </div>
+              <div class="file-meta">
+                <div class="file-name" title="${escapeHtml(item.file.name)}">${escapeHtml(item.file.name)}</div>
+                <div class="file-size">${formatBytes(item.file.size)} • ${item.extension.toUpperCase()}</div>
+                <div class="file-status">${escapeHtml(item.status)}</div>
+                <div class="item-progress"><div class="item-progress-fill" style="width:${item.progress}%"></div></div>
+              </div>
+              <button class="remove-file" type="button" data-remove-id="${item.id}" aria-label="Hapus ${escapeHtml(item.file.name)}" ${processing ? "disabled" : ""}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+              </button>
+            </div>
+          `).join("");
+          queueActions.classList.toggle("visible", queue.length > 0);
+          queueCount.textContent = `${queue.length} FILE${queue.length === 1 ? "" : "S"}`;
+          queueSummary.textContent = queue.length ? `${queue.length} file dalam antrean` : "Belum ada file";
+          convert.disabled = processing || queue.length === 0;
+          clearQueue.disabled = processing;
+        }
+
+        function updateQueueItem(item) {
+          const card = fileList.querySelector(`[data-id="${item.id}"]`);
+          if (!card) return;
+          card.className = `file-card ${item.statusKey}`;
+          card.querySelector(".file-status").textContent = item.status;
+          card.querySelector(".item-progress-fill").style.width = `${item.progress}%`;
+        }
+
+        function clearOutputs() {
+          outputs.forEach((output) => URL.revokeObjectURL(output.url));
+          outputs = [];
+          resultList.innerHTML = "";
+          result.classList.remove("visible");
+          resultCount.textContent = "0 file";
+          resultSize.textContent = "—";
+          resultSpeed.textContent = "—";
+        }
+
+        function fileKey(file) {
+          return `${file.name}:${file.size}:${file.lastModified}`;
+        }
+
+        function acceptFiles(fileCollection) {
+          if (processing) {
+            setMessage("Tunggu sampai batch selesai diproses.", true);
             return;
           }
-          selectedFile = file;
-          fileName.textContent = file.name;
-          fileSize.textContent = `${formatBytes(file.size)} • ${extension.toUpperCase()}`;
-          fileCard.classList.add("visible");
-          convert.disabled = false;
-          result.classList.remove("visible");
-          setMessage("File siap diproses.");
+          const incoming = Array.from(fileCollection || []);
+          if (!incoming.length) return;
+          const existing = new Set(queue.map((item) => fileKey(item.file)));
+          let added = 0;
+          let rejected = 0;
+          incoming.forEach((file) => {
+            const extension = file.name.toLowerCase().split(".").pop();
+            if (!allowedExtensions.includes(extension) || existing.has(fileKey(file)) || queue.length >= maxFiles) {
+              rejected += 1;
+              return;
+            }
+            queue.push({ id: nextId++, file, extension, statusKey: "queued", status: "Menunggu", progress: 0 });
+            existing.add(fileKey(file));
+            added += 1;
+          });
+          renderQueue();
+          if (added) {
+            clearOutputs();
+            setMessage(`${added} file siap diproses${rejected ? `, ${rejected} dilewati` : ""}.`);
+          } else {
+            setMessage("Tidak ada file baru yang bisa ditambahkan.", true);
+          }
         }
+
         browse.addEventListener("click", (event) => { event.stopPropagation(); input.click(); });
-        dropzone.addEventListener("click", () => input.click());
-        dropzone.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") input.click(); });
-        input.addEventListener("change", () => acceptFile(input.files[0]));
-        ["dragenter", "dragover"].forEach((eventName) => dropzone.addEventListener(eventName, (event) => { event.preventDefault(); dropzone.classList.add("dragging"); }));
-        ["dragleave", "drop"].forEach((eventName) => dropzone.addEventListener(eventName, (event) => { event.preventDefault(); dropzone.classList.remove("dragging"); }));
-        dropzone.addEventListener("drop", (event) => acceptFile(event.dataTransfer.files[0]));
-        removeFile.addEventListener("click", () => {
-          selectedFile = null; input.value = ""; fileCard.classList.remove("visible"); convert.disabled = true; result.classList.remove("visible"); setMessage("");
+        dropzone.addEventListener("click", (event) => {
+          if (!event.target.closest("button")) input.click();
+        });
+        dropzone.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            input.click();
+          }
+        });
+        input.addEventListener("change", () => {
+          acceptFiles(input.files);
+          input.value = "";
+        });
+        ["dragenter", "dragover"].forEach((eventName) => dropzone.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          dropzone.classList.add("dragging");
+        }));
+        ["dragleave", "drop"].forEach((eventName) => dropzone.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          dropzone.classList.remove("dragging");
+        }));
+        dropzone.addEventListener("drop", (event) => acceptFiles(event.dataTransfer.files));
+        fileList.addEventListener("click", (event) => {
+          const button = event.target.closest("[data-remove-id]");
+          if (!button || processing) return;
+          const id = Number(button.dataset.removeId);
+          queue = queue.filter((item) => item.id !== id);
+          renderQueue();
+          setMessage(queue.length ? "File dihapus dari antrean." : "");
+        });
+        clearQueue.addEventListener("click", () => {
+          if (processing) return;
+          queue = [];
+          input.value = "";
+          clearOutputs();
+          renderQueue();
+          setMessage("");
         });
 
-        async function createSpeedBuffer(audioBuffer) {
+        async function createSpeedBuffer(audioBuffer, selectedSpeed) {
           const sampleRate = audioBuffer.sampleRate;
-          const targetLength = Math.ceil(audioBuffer.length / speed);
+          const targetLength = Math.ceil(audioBuffer.length / selectedSpeed);
           if (targetLength <= 0 || targetLength > sampleRate * 3600) throw new Error("Durasi hasil terlalu panjang. Gunakan speed yang lebih tinggi.");
           const OfflineContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
           if (!OfflineContext) throw new Error("Browser ini belum mendukung OfflineAudioContext.");
           const offline = new OfflineContext(audioBuffer.numberOfChannels, targetLength, sampleRate);
           const source = offline.createBufferSource();
           source.buffer = audioBuffer;
-          source.playbackRate.value = speed;
+          source.playbackRate.value = selectedSpeed;
           source.connect(offline.destination);
           source.start(0);
           return offline.startRendering();
         }
 
         const yieldToUi = () => new Promise((resolve) => setTimeout(resolve, 0));
-        async function encodeOgg(audioBuffer) {
+        async function encodeOgg(audioBuffer, onProgress) {
           if (typeof window.OggVorbisEncoder !== "function") throw new Error("Encoder OGG belum termuat. Periksa koneksi internet lalu coba lagi.");
           const encoder = new window.OggVorbisEncoder(audioBuffer.sampleRate, audioBuffer.numberOfChannels, 0.45);
           const chunkSize = Math.max(4096, Math.floor(audioBuffer.sampleRate * 0.25));
@@ -468,10 +582,65 @@
             const channels = [];
             for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) channels.push(audioBuffer.getChannelData(channel).slice(offset, end));
             encoder.encode(channels);
-            setProgress(72 + (offset / audioBuffer.length) * 24, "Meng-encode ke OGG Vorbis…");
+            onProgress(offset / audioBuffer.length);
             await yieldToUi();
           }
           return encoder.finish("audio/ogg");
+        }
+
+        async function convertOne(item, selectedSpeed, index, total) {
+          const report = (percent, text) => {
+            item.progress = percent;
+            item.status = text;
+            updateQueueItem(item);
+            setProgress(((index + percent / 100) / total) * 100, `Lagu ${index + 1}/${total} • ${text}`);
+          };
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) throw new Error("Browser ini belum mendukung Web Audio API.");
+          const context = new AudioContextClass();
+          report(6, "Membaca file audio…");
+          let sourceBuffer;
+          try {
+            sourceBuffer = await context.decodeAudioData(await item.file.arrayBuffer());
+          } finally {
+            await context.close().catch(() => {});
+          }
+          report(38, "Menerapkan speed…");
+          const processedBuffer = await createSpeedBuffer(sourceBuffer, selectedSpeed);
+          report(68, "Menyiapkan encoder…");
+          const blob = await encodeOgg(processedBuffer, (ratio) => report(70 + ratio * 25, "Meng-encode ke OGG…"));
+          const outputFileName = `${item.file.name.replace(/\.[^/.]+$/, "")}_${formatSpeed(selectedSpeed)}.ogg`;
+          return {
+            fileName: outputFileName,
+            url: URL.createObjectURL(blob),
+            size: blob.size,
+            duration: processedBuffer.duration,
+            rate: processedBuffer.sampleRate,
+            channels: processedBuffer.numberOfChannels
+          };
+        }
+
+        function renderResults(selectedSpeed) {
+          const totalSize = outputs.reduce((sum, output) => sum + output.size, 0);
+          resultCount.textContent = `${outputs.length} file`;
+          resultSize.textContent = formatBytes(totalSize);
+          resultSpeed.textContent = formatSpeed(selectedSpeed);
+          resultList.innerHTML = outputs.map((output) => `
+            <article class="result-item">
+              <div class="result-item-head">
+                <div>
+                  <div class="result-item-name" title="${escapeHtml(output.fileName)}">${escapeHtml(output.fileName)}</div>
+                  <div class="result-item-meta">${formatBytes(output.size)} • ${output.rate.toLocaleString()} Hz • ${output.channels} ch • ${formatDuration(output.duration)}</div>
+                </div>
+                <span class="format-chip">OGG</span>
+              </div>
+              <audio src="${output.url}" controls preload="metadata"></audio>
+              <a class="download" href="${output.url}" data-url="${output.url}" download="${escapeHtml(output.fileName)}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                DOWNLOAD OGG
+              </a>
+            </article>
+          `).join("");
         }
 
         async function blobToDataUrl(blob) {
@@ -484,59 +653,71 @@
         }
 
         async function convertAudio() {
-          if (!selectedFile) return;
-          convert.disabled = true; progressWrap.classList.add("visible"); result.classList.remove("visible"); setProgress(5, "Membaca file audio…"); setMessage("");
-          try {
-            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContextClass) throw new Error("Browser ini belum mendukung Web Audio API.");
-            const context = new AudioContextClass();
-            setProgress(15, "Mendekode audio…");
-            const sourceBuffer = await context.decodeAudioData(await selectedFile.arrayBuffer());
-            await context.close();
-            setProgress(42, `Menerapkan speed ${formatSpeed(speed)}…`);
-            const processedBuffer = await createSpeedBuffer(sourceBuffer);
-            setProgress(70, "Menyiapkan encoder…");
-            const blob = await encodeOgg(processedBuffer);
-            outputFileName = `${selectedFile.name.replace(/\.[^/.]+$/, "")}_${formatSpeed(speed)}.ogg`;
-            if (outputUrl) URL.revokeObjectURL(outputUrl);
-            outputUrl = URL.createObjectURL(blob);
-            $("audioPreview").src = outputUrl;
-            $("resultFileName").textContent = outputFileName;
-            $("specRate").textContent = `${processedBuffer.sampleRate.toLocaleString()} Hz`;
-            $("specChannels").textContent = `${processedBuffer.numberOfChannels} ch`;
-            $("specDuration").textContent = formatDuration(processedBuffer.duration);
-            $("specSize").textContent = formatBytes(blob.size);
-            $("specSpeed").textContent = formatSpeed(speed);
-            $("downloadButton").href = outputUrl;
-            $("downloadButton").download = outputFileName;
-            setProgress(100, "Konversi selesai.");
+          if (processing || !queue.length) return;
+          processing = true;
+          const selectedSpeed = speed;
+          const total = queue.length;
+          const failures = [];
+          clearOutputs();
+          progressWrap.classList.add("visible");
+          convertLabel.textContent = "MEMPROSES BATCH…";
+          renderQueue();
+          setProgress(0, `Menyiapkan ${total} file…`);
+          setMessage("");
+          for (let index = 0; index < queue.length; index += 1) {
+            const item = queue[index];
+            item.statusKey = "processing";
+            item.status = "Memulai…";
+            item.progress = 0;
+            updateQueueItem(item);
+            try {
+              const output = await convertOne(item, selectedSpeed, index, total);
+              outputs.push(output);
+              item.statusKey = "done";
+              item.status = "Selesai";
+              item.progress = 100;
+            } catch (error) {
+              console.error(error);
+              item.statusKey = "error";
+              item.status = error?.message || "Konversi gagal";
+              item.progress = 0;
+              failures.push(item.file.name);
+            }
+            updateQueueItem(item);
+          }
+          processing = false;
+          convertLabel.textContent = "KONVERSI SEMUA";
+          renderQueue();
+          setProgress(100, failures.length ? "Batch selesai dengan beberapa file gagal." : "Semua konversi selesai.");
+          if (outputs.length) {
+            renderResults(selectedSpeed);
             result.classList.add("visible");
-            setMessage("OGG siap dipreview dan didownload.");
+            setMessage(failures.length ? `${outputs.length} berhasil, ${failures.length} gagal.` : `${outputs.length} file OGG siap didownload.`);
             result.scrollIntoView({ behavior: "smooth", block: "nearest" });
-          } catch (error) {
-            console.error(error);
-            setMessage(error?.message || "Konversi gagal. Coba file audio lain.", true);
-            setProgress(0, "Konversi gagal");
-          } finally {
-            convert.disabled = false;
+          } else {
+            setMessage("Semua file gagal dikonversi. Coba format audio lain.", true);
           }
         }
         convert.addEventListener("click", convertAudio);
 
-        $("downloadButton").addEventListener("click", async (event) => {
-          if (!outputUrl) return;
-          if (window.ReactNativeWebView) {
-            event.preventDefault();
-            try {
-              const response = await fetch(outputUrl);
-              const dataUrl = await blobToDataUrl(await response.blob());
-              window.ReactNativeWebView.postMessage(JSON.stringify({ type: "download", fileName: outputFileName, dataUrl }));
-              setMessage("Menyiapkan file untuk dibagikan…");
-            } catch (error) {
-              setMessage("File belum dapat disiapkan untuk dibagikan.", true);
-            }
+        resultList.addEventListener("click", async (event) => {
+          const link = event.target.closest(".download");
+          if (!link || !window.ReactNativeWebView) return;
+          event.preventDefault();
+          try {
+            const response = await fetch(link.dataset.url);
+            const dataUrl = await blobToDataUrl(await response.blob());
+            window.ReactNativeWebView.postMessage(JSON.stringify({
+              type: "download",
+              fileName: link.getAttribute("download"),
+              dataUrl
+            }));
+            setMessage("Menyiapkan file untuk dibagikan…");
+          } catch (error) {
+            setMessage("File belum dapat disiapkan untuk dibagikan.", true);
           }
         });
+        renderQueue();
       })();
     </script>
   </body>
