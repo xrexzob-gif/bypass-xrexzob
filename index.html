@@ -1,1170 +1,446 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta name="theme-color" content="#080b14">
-
-<title>Sharejo — Audio Converter</title>
-
-<style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-:root{
-    --bg:#070910;
-    --card:rgba(17,21,35,.82);
-    --line:rgba(255,255,255,.09);
-    --text:#f5f7ff;
-    --muted:#8991a7;
-    --purple:#7669ff;
-    --cyan:#00c8ff;
-}
-
-body{
-    min-height:100vh;
-    font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
-    color:var(--text);
-    background:
-        radial-gradient(circle at 15% 15%,rgba(118,105,255,.20),transparent 30%),
-        radial-gradient(circle at 90% 85%,rgba(0,200,255,.15),transparent 30%),
-        var(--bg);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:18px;
-    overflow-x:hidden;
-}
-
-.background{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    overflow:hidden;
-}
-
-.glow{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(70px);
-    opacity:.28;
-    animation:moveGlow 9s ease-in-out infinite alternate;
-}
-
-.glow.one{
-    width:250px;
-    height:250px;
-    background:#665aff;
-    top:-100px;
-    left:-80px;
-}
-
-.glow.two{
-    width:220px;
-    height:220px;
-    background:#00bfff;
-    right:-80px;
-    bottom:-80px;
-    animation-delay:2s;
-}
-
-@keyframes moveGlow{
-    from{
-        transform:translate(0,0) scale(1);
-    }
-    to{
-        transform:translate(30px,-25px) scale(1.08);
-    }
-}
-
-.app{
-    width:min(920px,100%);
-    aspect-ratio:4 / 3;
-    min-height:640px;
-    padding:27px;
-    border:1px solid var(--line);
-    border-radius:28px;
-    background:rgba(9,12,22,.78);
-    backdrop-filter:blur(25px);
-    box-shadow:
-        0 35px 100px rgba(0,0,0,.55),
-        inset 0 1px rgba(255,255,255,.04);
-    position:relative;
-    z-index:1;
-    display:flex;
-    flex-direction:column;
-}
-
-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-}
-
-.brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-.logo{
-    width:48px;
-    height:48px;
-    display:grid;
-    place-items:center;
-    border-radius:15px;
-    background:linear-gradient(135deg,var(--purple),var(--cyan));
-    box-shadow:0 10px 30px rgba(70,80,255,.25);
-    font-size:24px;
-    font-weight:900;
-}
-
-.brand h1{
-    font-size:22px;
-    letter-spacing:-.5px;
-}
-
-.brand p{
-    color:var(--muted);
-    font-size:11px;
-    margin-top:3px;
-}
-
-.badge{
-    border:1px solid var(--line);
-    background:rgba(255,255,255,.035);
-    border-radius:999px;
-    padding:8px 12px;
-    font-size:10px;
-    color:#aeb5c7;
-}
-
-.main{
-    flex:1;
-    min-height:0;
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    gap:18px;
-}
-
-.card{
-    border:1px solid var(--line);
-    background:var(--card);
-    border-radius:21px;
-    padding:18px;
-}
-
-.uploadCard{
-    height:100%;
-}
-
-.upload{
-    height:100%;
-    min-height:310px;
-    border:1.5px dashed rgba(118,105,255,.55);
-    border-radius:18px;
-    background:rgba(118,105,255,.035);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.upload:hover,
-.upload.drag{
-    border-color:#8c83ff;
-    background:rgba(118,105,255,.09);
-    transform:translateY(-2px);
-}
-
-.uploadIcon{
-    width:70px;
-    height:70px;
-    margin:0 auto 15px;
-    border-radius:21px;
-    display:grid;
-    place-items:center;
-    font-size:30px;
-    background:linear-gradient(
-        135deg,
-        rgba(118,105,255,.25),
-        rgba(0,200,255,.10)
-    );
-    border:1px solid var(--line);
-}
-
-.upload h2{
-    font-size:18px;
-    margin-bottom:7px;
-}
-
-.upload p{
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.6;
-}
-
-.fileInfo{
-    display:none;
-    margin-top:15px;
-    padding:11px;
-    border-radius:12px;
-    background:rgba(0,0,0,.2);
-    color:#cbd1df;
-    font-size:11px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-#fileInput{
-    display:none;
-}
-
-.right{
-    min-width:0;
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-}
-
-.title{
-    color:var(--muted);
-    font-size:11px;
-    margin-bottom:8px;
-}
-
-.speedCurrent{
-    font-size:28px;
-    font-weight:800;
-    margin-bottom:13px;
-}
-
-.speedCurrent span{
-    color:var(--muted);
-    font-size:12px;
-    font-weight:500;
-}
-
-.speedGrid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:7px;
-}
-
-.speed{
-    border:1px solid var(--line);
-    background:rgba(255,255,255,.035);
-    color:#c9cfdd;
-    border-radius:10px;
-    padding:10px 5px;
-    cursor:pointer;
-    font-size:11px;
-    transition:.18s;
-}
-
-.speed:hover{
-    border-color:var(--purple);
-}
-
-.speed.active{
-    color:white;
-    border-color:#7d72ff;
-    background:linear-gradient(
-        135deg,
-        rgba(118,105,255,.32),
-        rgba(0,200,255,.09)
-    );
-}
-
-.process{
-    width:100%;
-    border:0;
-    padding:14px;
-    border-radius:13px;
-    color:#fff;
-    font-weight:800;
-    font-size:13px;
-    cursor:pointer;
-    background:linear-gradient(135deg,var(--purple),var(--cyan));
-    box-shadow:0 12px 30px rgba(74,80,255,.20);
-    transition:.2s;
-}
-
-.process:hover{
-    transform:translateY(-1px);
-}
-
-.process:disabled{
-    opacity:.45;
-    cursor:not-allowed;
-    transform:none;
-}
-
-.progressBox{
-    display:none;
-    margin-top:13px;
-}
-
-.progressInfo{
-    display:flex;
-    justify-content:space-between;
-    color:var(--muted);
-    font-size:10px;
-    margin-bottom:7px;
-}
-
-.progress{
-    height:7px;
-    border-radius:20px;
-    background:rgba(255,255,255,.07);
-    overflow:hidden;
-}
-
-.progressBar{
-    width:0%;
-    height:100%;
-    border-radius:20px;
-    background:linear-gradient(90deg,var(--purple),var(--cyan));
-    transition:width .2s;
-}
-
-.status{
-    margin-top:9px;
-    min-height:15px;
-    color:var(--muted);
-    font-size:10px;
-    line-height:1.5;
-}
-
-.status.ok{
-    color:#67e8bf;
-}
-
-.status.error{
-    color:#ff8494;
-}
-
-.result{
-    display:none;
-}
-
-.result audio{
-    width:100%;
-    height:38px;
-    margin:8px 0 10px;
-}
-
-.download{
-    display:block;
-    text-align:center;
-    text-decoration:none;
-    color:#fff;
-    border:1px solid rgba(0,200,255,.28);
-    background:rgba(0,200,255,.10);
-    border-radius:11px;
-    padding:12px;
-    font-size:11px;
-    font-weight:800;
-}
-
-footer{
-    color:#51596b;
-    font-size:9px;
-    text-align:center;
-    margin-top:13px;
-}
-
-@media(max-width:720px){
-
-    body{
-        padding:9px;
-        align-items:flex-start;
-    }
-
-    .app{
-        aspect-ratio:auto;
-        min-height:0;
-        padding:15px;
-        border-radius:22px;
-        margin-top:5px;
-    }
-
-    .main{
-        grid-template-columns:1fr;
-    }
-
-    .upload{
-        min-height:220px;
-    }
-
-    .badge{
-        display:none;
-    }
-
-    .card{
-        padding:14px;
-    }
-
-    .brand h1{
-        font-size:20px;
-    }
-
-    .speedGrid{
-        grid-template-columns:repeat(3,1fr);
-    }
-}
-</style>
-</head>
-
-<body>
-
-<div class="background">
-    <div class="glow one"></div>
-    <div class="glow two"></div>
-</div>
-
-<main class="app">
-
-<header>
-
-    <div class="brand">
-
-        <div class="logo">♫</div>
-
-        <div>
-            <h1>Sharejo</h1>
-            <p>Audio Speed Converter</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#090c14" />
+    <title>Roblox Audio Converter</title>
+    <script>
+      // Pinned to the encoder repository commit so the client-only build remains reproducible.
+      window.OggVorbisEncoderConfig = { memoryInitializerPrefixURL: "" };
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/gh/higuma/ogg-vorbis-encoder-js@c6508ae1031b9950a706f41f98a5f4fdd40363c1/lib/OggVorbisEncoder.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090c14;
+        --surface: #101522;
+        --surface-2: #151c2d;
+        --surface-3: #1b2437;
+        --line: rgba(150, 165, 196, 0.17);
+        --text: #f4f7ff;
+        --muted: #8995ac;
+        --cyan: #53e5ff;
+        --cyan-2: #16bde2;
+        --orange: #ff9b5c;
+        --danger: #ff718b;
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+      }
+
+      * { box-sizing: border-box; }
+      html, body { min-height: 100%; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 12% 0%, rgba(32, 94, 130, 0.25), transparent 34rem),
+          radial-gradient(circle at 96% 9%, rgba(201, 91, 41, 0.15), transparent 27rem),
+          var(--bg);
+        color: var(--text);
+        padding: max(20px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+          max(34px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+      }
+
+      button, input { font: inherit; }
+      button { cursor: pointer; }
+      .shell { width: min(980px, 100%); margin: 0 auto; }
+      .topbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin: 8px 0 26px; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .brand-mark {
+        width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px;
+        color: var(--bg); background: linear-gradient(135deg, var(--cyan), #a1f7ff 58%, var(--orange));
+        box-shadow: 0 0 32px rgba(83, 229, 255, 0.24);
+      }
+      .brand-mark svg { width: 22px; height: 22px; }
+      .eyebrow { color: var(--cyan); font-size: 10px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+      h1 { margin: 3px 0 0; font-size: clamp(22px, 4vw, 32px); letter-spacing: -.04em; }
+      .privacy { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; white-space: nowrap; }
+      .privacy svg { width: 15px; color: var(--cyan); }
+
+      .hero { margin-bottom: 18px; }
+      .hero h2 { max-width: 670px; margin: 0; font-size: clamp(30px, 7vw, 58px); line-height: .98; letter-spacing: -.065em; }
+      .hero h2 span { color: var(--cyan); }
+      .hero p { max-width: 570px; margin: 17px 0 0; color: var(--muted); line-height: 1.6; font-size: 14px; }
+
+      .grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(290px, .8fr); gap: 16px; align-items: start; }
+      .panel {
+        position: relative; overflow: hidden; background: rgba(16, 21, 34, .9); border: 1px solid var(--line);
+        border-radius: 22px; padding: 20px; box-shadow: var(--shadow); backdrop-filter: blur(18px);
+      }
+      .panel::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: linear-gradient(135deg, rgba(255,255,255,.055), transparent 36%); }
+      .panel > * { position: relative; z-index: 1; }
+      .panel-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 17px; }
+      .panel-title { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 750; }
+      .number { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 8px; color: var(--bg); background: var(--cyan); font-size: 11px; font-weight: 900; }
+      .format-chip { color: var(--cyan); border: 1px solid rgba(83,229,255,.25); background: rgba(83,229,255,.08); border-radius: 99px; padding: 5px 9px; font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+
+      .dropzone {
+        min-height: 218px; display: grid; place-items: center; text-align: center; padding: 26px;
+        border: 1px dashed rgba(83,229,255,.42); border-radius: 17px; background: linear-gradient(145deg, rgba(83,229,255,.08), rgba(255,155,92,.035));
+        transition: border-color .2s, background .2s, transform .2s;
+      }
+      .dropzone.dragging, .dropzone:hover { border-color: var(--cyan); background: rgba(83,229,255,.12); transform: translateY(-1px); }
+      .upload-icon { width: 52px; height: 52px; display: grid; place-items: center; margin: 0 auto 13px; border-radius: 16px; color: var(--cyan); background: rgba(83,229,255,.11); }
+      .upload-icon svg { width: 25px; height: 25px; }
+      .dropzone strong { display: block; font-size: 15px; }
+      .dropzone p { margin: 7px 0 14px; color: var(--muted); font-size: 12px; }
+      .browse { border: 1px solid rgba(83,229,255,.4); border-radius: 9px; padding: 9px 13px; background: rgba(83,229,255,.11); color: var(--cyan); font-size: 12px; font-weight: 750; }
+      .browse:hover { background: rgba(83,229,255,.2); }
+      #fileInput { display: none; }
+      .file-card { display: none; align-items: center; gap: 12px; margin-top: 14px; padding: 13px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.035); }
+      .file-card.visible { display: flex; }
+      .file-icon { width: 34px; height: 34px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 10px; color: var(--orange); background: rgba(255,155,92,.12); }
+      .file-icon svg { width: 17px; }
+      .file-meta { min-width: 0; flex: 1; }
+      .file-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 700; }
+      .file-size { margin-top: 4px; color: var(--muted); font-size: 11px; }
+      .remove-file { display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 8px; color: var(--muted); background: transparent; }
+      .remove-file:hover { color: var(--danger); background: rgba(255,113,139,.1); }
+
+      .speed-panel { height: 100%; }
+      .speed-copy { margin: -3px 0 18px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+      .presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .speed-option { min-height: 40px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); background: rgba(255,255,255,.025); font-size: 12px; font-weight: 750; transition: .2s; }
+      .speed-option:hover { border-color: rgba(83,229,255,.5); color: var(--text); }
+      .speed-option.active { border-color: var(--cyan); color: var(--bg); background: var(--cyan); box-shadow: 0 0 18px rgba(83,229,255,.17); }
+      .custom-label { display: block; margin: 18px 0 8px; color: var(--muted); font-size: 11px; font-weight: 700; }
+      .custom-row { display: flex; gap: 8px; }
+      .custom-row input { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 10px; padding: 10px 11px; outline: none; color: var(--text); background: rgba(255,255,255,.045); }
+      .custom-row input:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(83,229,255,.1); }
+      .use-speed { border: 0; border-radius: 10px; padding: 0 12px; color: var(--bg); background: var(--orange); font-size: 10px; font-weight: 900; white-space: nowrap; }
+      .use-speed:hover { filter: brightness(1.08); }
+      .active-speed { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+      .active-speed strong { color: var(--text); font-size: 18px; letter-spacing: -.03em; }
+
+      .convert { width: 100%; display: flex; justify-content: center; align-items: center; gap: 9px; margin-top: 16px; padding: 14px 18px; border: 0; border-radius: 12px; color: var(--bg); background: linear-gradient(105deg, var(--cyan), #91f5ff); font-size: 12px; font-weight: 900; letter-spacing: .04em; transition: .2s; }
+      .convert:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(83,229,255,.18); }
+      .convert:disabled { cursor: not-allowed; color: #667387; background: #202838; }
+      .convert svg { width: 16px; }
+      .progress-wrap { display: none; margin-top: 15px; }
+      .progress-wrap.visible { display: block; }
+      .progress-label { display: flex; justify-content: space-between; margin-bottom: 7px; color: var(--muted); font-size: 11px; }
+      .progress-track { height: 6px; overflow: hidden; border-radius: 99px; background: #202838; }
+      .progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--cyan-2), var(--cyan)); transition: width .25s ease; }
+      .message { min-height: 17px; margin: 12px 0 0; color: var(--muted); font-size: 11px; }
+      .message.error { color: var(--danger); }
+
+      .result { display: none; margin-top: 16px; }
+      .result.visible { display: block; }
+      .result h3 { margin: 0 0 13px; font-size: 15px; }
+      .specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .spec { padding: 11px; border: 1px solid var(--line); border-radius: 11px; background: rgba(255,255,255,.03); }
+      .spec span { display: block; color: var(--muted); font-size: 10px; }
+      .spec strong { display: block; margin-top: 5px; font-size: 12px; }
+      audio { width: 100%; height: 40px; margin-top: 14px; filter: invert(.91) hue-rotate(165deg) saturate(.7); }
+      .download { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; margin-top: 12px; padding: 12px; border: 1px solid rgba(255,155,92,.42); border-radius: 11px; color: var(--orange); background: rgba(255,155,92,.08); font-size: 12px; font-weight: 850; text-decoration: none; }
+      .download:hover { background: rgba(255,155,92,.15); }
+      .download svg { width: 16px; }
+      .footer-note { display: flex; align-items: center; gap: 7px; margin-top: 18px; color: var(--muted); font-size: 11px; }
+      .footer-note svg { width: 14px; color: var(--cyan); }
+
+      @media (max-width: 720px) {
+        .topbar { align-items: flex-start; }
+        .privacy { padding-top: 7px; }
+        .privacy span { display: none; }
+        .grid { grid-template-columns: 1fr; }
+        .panel { padding: 16px; border-radius: 18px; }
+        .dropzone { min-height: 190px; }
+      }
+      @media (max-width: 370px) {
+        .specs { grid-template-columns: repeat(2, 1fr); }
+        .presets { grid-template-columns: repeat(2, 1fr); }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12h3l2.2-6 4.6 12 2.2-6H20"/><path d="M7 4h10"/>
+            </svg>
+          </div>
+          <div><div class="eyebrow">Local audio tool</div><h1>Roblox Audio Converter</h1></div>
         </div>
+        <div class="privacy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>Proses di perangkat Anda</span>
+        </div>
+      </header>
 
-    </div>
+      <section class="hero">
+        <div class="eyebrow">MP3 / WAV / OGG → OGG Vorbis</div>
+        <h2>Siapkan audio untuk Roblox,<br /><span>tanpa upload ke server.</span></h2>
+        <p>Atur kecepatan, konversi langsung dari browser, lalu dengarkan dan simpan hasilnya. File Anda tetap lokal.</p>
+      </section>
 
-    <div class="badge">
-        MP3 → OGG
-    </div>
-
-</header>
-
-
-<div class="main">
-
-    <!-- UPLOAD -->
-
-    <div class="card uploadCard">
-
-        <label
-            class="upload"
-            id="upload"
-            for="fileInput"
-        >
-
+      <section class="grid">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="number">01</span> Upload audio</div>
+            <span class="format-chip">CLIENT-SIDE</span>
+          </div>
+          <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Pilih file audio">
             <div>
-
-                <div class="uploadIcon">
-                    ↑
-                </div>
-
-                <h2>
-                    Upload Audio
-                </h2>
-
-                <p>
-                    MP3, WAV atau OGG<br>
-                    Klik atau drag file ke sini
-                </p>
-
-                <div
-                    class="fileInfo"
-                    id="fileInfo"
-                ></div>
-
+              <div class="upload-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg>
+              </div>
+              <strong>Tarik file audio ke sini</strong>
+              <p>MP3, WAV, OGG, M4A, AAC, atau FLAC</p>
+              <button class="browse" id="browseButton" type="button">PILIH FILE</button>
             </div>
-
-        </label>
-
-        <input
-            id="fileInput"
-            type="file"
-            accept=".mp3,.wav,.ogg,audio/mpeg,audio/wav,audio/ogg"
-        >
-
-    </div>
-
-
-    <!-- SETTINGS -->
-
-    <div class="right">
-
-        <div class="card">
-
-            <div class="title">
-                KECEPATAN AUDIO
-            </div>
-
-            <div class="speedCurrent">
-                <span id="speedValue">1.0</span>
-                <span>× speed</span>
-            </div>
-
-            <div class="speedGrid">
-
-                <button class="speed active" data-speed="1.0">
-                    1.0×
-                </button>
-
-                <button class="speed" data-speed="1.1">
-                    1.1×
-                </button>
-
-                <button class="speed" data-speed="1.2">
-                    1.2×
-                </button>
-
-                <button class="speed" data-speed="1.3">
-                    1.3×
-                </button>
-
-                <button class="speed" data-speed="1.4">
-                    1.4×
-                </button>
-
-                <button class="speed" data-speed="1.5">
-                    1.5×
-                </button>
-
-                <button class="speed" data-speed="1.6">
-                    1.6×
-                </button>
-
-                <button class="speed" data-speed="1.7">
-                    1.7×
-                </button>
-
-                <button class="speed" data-speed="1.8">
-                    1.8×
-                </button>
-
-                <button class="speed" data-speed="1.9">
-                    1.9×
-                </button>
-
-                <button class="speed" data-speed="2.0">
-                    2.0×
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <button
-                class="process"
-                id="process"
-                disabled
-            >
-                ⚡ Proses Audio
+            <input id="fileInput" type="file" accept=".mp3,.wav,.ogg,.m4a,.aac,.flac,audio/*" />
+          </div>
+          <div class="file-card" id="fileCard">
+            <div class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M13 2v7h7"/></svg></div>
+            <div class="file-meta"><div class="file-name" id="fileName"></div><div class="file-size" id="fileSize"></div></div>
+            <button class="remove-file" id="removeFile" type="button" aria-label="Hapus file">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
             </button>
-
-            <div
-                class="progressBox"
-                id="progressBox"
-            >
-
-                <div class="progressInfo">
-
-                    <span id="progressText">
-                        Menyiapkan...
-                    </span>
-
-                    <span id="percent">
-                        0%
-                    </span>
-
-                </div>
-
-                <div class="progress">
-
-                    <div
-                        class="progressBar"
-                        id="progressBar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-            <div
-                class="status"
-                id="status"
-            ></div>
-
+          </div>
+          <button class="convert" id="convertButton" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 9-12h-7z"/></svg>
+            KONVERSI KE OGG
+          </button>
+          <div class="progress-wrap" id="progressWrap">
+            <div class="progress-label"><span id="progressText">Menyiapkan audio…</span><strong id="progressPercent">0%</strong></div>
+            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          </div>
+          <p class="message" id="message" role="status"></p>
         </div>
 
+        <aside class="panel speed-panel">
+          <div class="panel-header"><div class="panel-title"><span class="number">02</span> Atur speed</div></div>
+          <p class="speed-copy">Pilih preset atau masukkan angka bebas. Kecepatan akan diterapkan ke durasi dan pitch audio.</p>
+          <div class="presets" id="presets">
+            <button class="speed-option active" data-speed="1">1.00x</button>
+            <button class="speed-option" data-speed="1.25">1.25x</button>
+            <button class="speed-option" data-speed="1.5">1.50x</button>
+            <button class="speed-option" data-speed="1.75">1.75x</button>
+            <button class="speed-option" data-speed="2">2.00x</button>
+          </div>
+          <label class="custom-label" for="customSpeed">CUSTOM SPEED</label>
+          <div class="custom-row">
+            <input id="customSpeed" type="number" min="0.001" step="any" placeholder="Contoh: 3.25" inputmode="decimal" />
+            <button class="use-speed" id="useSpeed" type="button">PAKAI SPEED</button>
+          </div>
+          <div class="active-speed"><span>Speed terpilih</span><strong id="activeSpeed">1.00x</strong></div>
+          <div class="footer-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v5c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>Optimized untuk audio Roblox</span>
+          </div>
+        </aside>
+      </section>
 
-        <div
-            class="card result"
-            id="result"
-        >
-
-            <div class="title">
-                HASIL AUDIO
-            </div>
-
-            <audio
-                id="preview"
-                controls
-            ></audio>
-
-            <a
-                class="download"
-                id="download"
-                download
-            >
-                ↓ Download OGG
-            </a>
-
+      <section class="panel result" id="result">
+        <div class="panel-header"><div class="panel-title"><span class="number">03</span> Hasil konversi</div><span class="format-chip">READY</span></div>
+        <h3 id="resultFileName">Audio hasil</h3>
+        <div class="specs">
+          <div class="spec"><span>Format</span><strong id="specFormat">audio/ogg</strong></div>
+          <div class="spec"><span>Sample rate</span><strong id="specRate">—</strong></div>
+          <div class="spec"><span>Channels</span><strong id="specChannels">—</strong></div>
+          <div class="spec"><span>Durasi</span><strong id="specDuration">—</strong></div>
+          <div class="spec"><span>Ukuran file</span><strong id="specSize">—</strong></div>
+          <div class="spec"><span>Speed</span><strong id="specSpeed">—</strong></div>
         </div>
+        <audio id="audioPreview" controls preload="metadata"></audio>
+        <a class="download" id="downloadButton" href="#" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          DOWNLOAD OGG
+        </a>
+      </section>
+    </main>
 
-    </div>
+    <script>
+      (() => {
+        const allowedExtensions = ["mp3", "wav", "ogg", "m4a", "aac", "flac"];
+        const dropzone = document.getElementById("dropzone");
+        const input = document.getElementById("fileInput");
+        const browse = document.getElementById("browseButton");
+        const fileCard = document.getElementById("fileCard");
+        const fileName = document.getElementById("fileName");
+        const fileSize = document.getElementById("fileSize");
+        const removeFile = document.getElementById("removeFile");
+        const convert = document.getElementById("convertButton");
+        const message = document.getElementById("message");
+        const progressWrap = document.getElementById("progressWrap");
+        const progressFill = document.getElementById("progressFill");
+        const progressText = document.getElementById("progressText");
+        const progressPercent = document.getElementById("progressPercent");
+        const result = document.getElementById("result");
+        const customSpeed = document.getElementById("customSpeed");
+        const activeSpeed = document.getElementById("activeSpeed");
+        const useSpeed = document.getElementById("useSpeed");
+        let selectedFile = null;
+        let speed = 1;
+        let outputUrl = null;
+        let outputFileName = "";
 
-</div>
+        const $ = (id) => document.getElementById(id);
+        const setMessage = (text, isError = false) => { message.textContent = text; message.className = `message${isError ? " error" : ""}`; };
+        const formatBytes = (bytes) => {
+          if (!bytes) return "0 B";
+          const units = ["B", "KB", "MB", "GB"];
+          const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+          return `${(bytes / Math.pow(1024, index)).toFixed(index ? 2 : 0)} ${units[index]}`;
+        };
+        const formatDuration = (seconds) => {
+          const mins = Math.floor(seconds / 60);
+          const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
+          return `${mins}:${secs}`;
+        };
+        const formatSpeed = (value) => `${Number(value).toFixed(2)}x`;
+        const setProgress = (value, text) => {
+          const percent = Math.max(0, Math.min(100, Math.round(value)));
+          progressFill.style.width = `${percent}%`;
+          progressPercent.textContent = `${percent}%`;
+          progressText.textContent = text;
+        };
 
-
-<footer>
-    Sharejo • Browser Audio Converter
-</footer>
-
-</main>
-
-
-<!--
-=========================================================
- OGG VORBIS ENCODER
- Library: OggVorbisEncoder.js
- Source: higuma/ogg-vorbis-encoder-js
- =========================================================
--->
-
-<script src="https://cdn.jsdelivr.net/gh/higuma/ogg-vorbis-encoder-js@master/lib/OggVorbisEncoder.js"></script>
-
-
-<script>
-"use strict";
-
-
-/* =========================================
-   ELEMENTS
-========================================= */
-
-const fileInput =
-    document.getElementById("fileInput");
-
-const upload =
-    document.getElementById("upload");
-
-const fileInfo =
-    document.getElementById("fileInfo");
-
-const processButton =
-    document.getElementById("process");
-
-const speedButtons =
-    document.querySelectorAll(".speed");
-
-const speedValue =
-    document.getElementById("speedValue");
-
-const status =
-    document.getElementById("status");
-
-const progressBox =
-    document.getElementById("progressBox");
-
-const progressBar =
-    document.getElementById("progressBar");
-
-const progressText =
-    document.getElementById("progressText");
-
-const percent =
-    document.getElementById("percent");
-
-const result =
-    document.getElementById("result");
-
-const preview =
-    document.getElementById("preview");
-
-const download =
-    document.getElementById("download");
-
-
-/* =========================================
-   VARIABLES
-========================================= */
-
-let selectedFile = null;
-
-let selectedSpeed = 1.0;
-
-let outputURL = null;
-
-
-/* =========================================
-   SPEED
-========================================= */
-
-speedButtons.forEach(button => {
-
-    button.addEventListener("click",() => {
-
-        speedButtons.forEach(item => {
-            item.classList.remove("active");
+        function selectSpeed(value) {
+          speed = Number(value);
+          activeSpeed.textContent = formatSpeed(speed);
+          document.querySelectorAll(".speed-option").forEach((button) => {
+            button.classList.toggle("active", Number(button.dataset.speed) === speed);
+          });
+        }
+        document.querySelectorAll(".speed-option").forEach((button) => button.addEventListener("click", () => selectSpeed(button.dataset.speed)));
+        useSpeed.addEventListener("click", () => {
+          const value = Number(customSpeed.value);
+          if (!Number.isFinite(value) || value <= 0) {
+            setMessage("Masukkan speed lebih besar dari 0.", true);
+            customSpeed.focus();
+            return;
+          }
+          selectSpeed(value);
+          setMessage(`Custom speed ${formatSpeed(value)} siap digunakan.`);
         });
 
-        button.classList.add("active");
+        function acceptFile(file) {
+          if (!file) return;
+          const extension = file.name.toLowerCase().split(".").pop();
+          if (!allowedExtensions.includes(extension)) {
+            setMessage("Format file tidak didukung. Pilih MP3, WAV, OGG, M4A, AAC, atau FLAC.", true);
+            return;
+          }
+          selectedFile = file;
+          fileName.textContent = file.name;
+          fileSize.textContent = `${formatBytes(file.size)} • ${extension.toUpperCase()}`;
+          fileCard.classList.add("visible");
+          convert.disabled = false;
+          result.classList.remove("visible");
+          setMessage("File siap diproses.");
+        }
+        browse.addEventListener("click", (event) => { event.stopPropagation(); input.click(); });
+        dropzone.addEventListener("click", () => input.click());
+        dropzone.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") input.click(); });
+        input.addEventListener("change", () => acceptFile(input.files[0]));
+        ["dragenter", "dragover"].forEach((eventName) => dropzone.addEventListener(eventName, (event) => { event.preventDefault(); dropzone.classList.add("dragging"); }));
+        ["dragleave", "drop"].forEach((eventName) => dropzone.addEventListener(eventName, (event) => { event.preventDefault(); dropzone.classList.remove("dragging"); }));
+        dropzone.addEventListener("drop", (event) => acceptFile(event.dataTransfer.files[0]));
+        removeFile.addEventListener("click", () => {
+          selectedFile = null; input.value = ""; fileCard.classList.remove("visible"); convert.disabled = true; result.classList.remove("visible"); setMessage("");
+        });
 
-        selectedSpeed =
-            Number(button.dataset.speed);
-
-        speedValue.textContent =
-            selectedSpeed.toFixed(1);
-
-        result.style.display = "none";
-
-        clearStatus();
-
-    });
-
-});
-
-
-/* =========================================
-   FILE INPUT
-========================================= */
-
-fileInput.addEventListener(
-    "change",
-    event => {
-
-        const file =
-            event.target.files[0];
-
-        if(file){
-            setFile(file);
+        async function createSpeedBuffer(audioBuffer) {
+          const sampleRate = audioBuffer.sampleRate;
+          const targetLength = Math.ceil(audioBuffer.length / speed);
+          if (targetLength <= 0 || targetLength > sampleRate * 3600) throw new Error("Durasi hasil terlalu panjang. Gunakan speed yang lebih tinggi.");
+          const OfflineContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+          if (!OfflineContext) throw new Error("Browser ini belum mendukung OfflineAudioContext.");
+          const offline = new OfflineContext(audioBuffer.numberOfChannels, targetLength, sampleRate);
+          const source = offline.createBufferSource();
+          source.buffer = audioBuffer;
+          source.playbackRate.value = speed;
+          source.connect(offline.destination);
+          source.start(0);
+          return offline.startRendering();
         }
 
-    }
-);
-
-
-/* =========================================
-   DRAG DROP
-========================================= */
-
-["dragenter","dragover"].forEach(type => {
-
-    upload.addEventListener(type,event => {
-
-        event.preventDefault();
-
-        upload.classList.add("drag");
-
-    });
-
-});
-
-
-["dragleave","drop"].forEach(type => {
-
-    upload.addEventListener(type,event => {
-
-        event.preventDefault();
-
-        upload.classList.remove("drag");
-
-    });
-
-});
-
-
-upload.addEventListener("drop",event => {
-
-    const file =
-        event.dataTransfer.files[0];
-
-    if(file){
-        setFile(file);
-    }
-
-});
-
-
-/* =========================================
-   SET FILE
-========================================= */
-
-function setFile(file){
-
-    if(!isAudio(file)){
-
-        selectedFile = null;
-
-        processButton.disabled = true;
-
-        fileInfo.style.display = "block";
-
-        fileInfo.textContent =
-            "❌ Format tidak didukung";
-
-        setStatus(
-            "Gunakan MP3, WAV atau OGG.",
-            "error"
-        );
-
-        return;
-    }
-
-
-    selectedFile = file;
-
-    fileInfo.style.display = "block";
-
-    fileInfo.textContent =
-        "✓ " +
-        file.name +
-        " • " +
-        formatBytes(file.size);
-
-
-    processButton.disabled = false;
-
-    result.style.display = "none";
-
-    setStatus(
-        "Audio siap diproses.",
-        "ok"
-    );
-
-}
-
-
-/* =========================================
-   CHECK AUDIO
-========================================= */
-
-function isAudio(file){
-
-    const ext =
-        file.name
-        .split(".")
-        .pop()
-        .toLowerCase();
-
-    return [
-        "mp3",
-        "wav",
-        "ogg"
-    ].includes(ext);
-
-}
-
-
-/* =========================================
-   PROCESS
-========================================= */
-
-processButton.addEventListener(
-    "click",
-    processAudio
-);
-
-
-async function processAudio(){
-
-    if(!selectedFile){
-        return;
-    }
-
-
-    processButton.disabled = true;
-
-    result.style.display = "none";
-
-    progressBox.style.display = "block";
-
-    setProgress(
-        5,
-        "Membaca file..."
-    );
-
-
-    try{
-
-        /*
-         * Read uploaded file
-         */
-
-        const data =
-            await selectedFile.arrayBuffer();
-
-
-        setProgress(
-            15,
-            "Mendekode audio..."
-        );
-
-
-        /*
-         * Decode using browser AudioContext
-         */
-
-        const AudioCtx =
-            window.AudioContext ||
-            window.webkitAudioContext;
-
-        if(!AudioCtx){
-
-            throw new Error(
-                "Browser tidak mendukung Web Audio API."
-            );
-
-        }
-
-
-        const audioContext =
-            new AudioCtx();
-
-
-        const sourceBuffer =
-            await audioContext.decodeAudioData(
-                data.slice(0)
-            );
-
-
-        setProgress(
-            30,
-            "Mengubah kecepatan..."
-        );
-
-
-        /*
-         * Resample audio.
-         *
-         * Example:
-         *
-         * 2.0x =
-         * output length / 2
-         */
-
-        const processed =
-            resampleSpeed(
-                sourceBuffer,
-                selectedSpeed
-            );
-
-
-        setProgress(
-            55,
-            "Memuat encoder OGG..."
-        );
-
-
-        /*
-         * Check actual encoder
-         */
-
-        if(
-            typeof window.OggVorbisEncoder ===
-            "undefined"
-        ){
-
-            throw new Error(
-                "Encoder OGG belum berhasil dimuat."
-            );
-
-        }
-
-
-        setProgress(
-            65,
-            "Encoding OGG Vorbis..."
-        );
-
-
-        /*
-         * Official API:
-         *
-         * new OggVorbisEncoder(
-         *   sampleRate,
-         *   channels,
-         *   quality
-         * )
-         */
-
-        const encoder =
-            new OggVorbisEncoder(
-                processed.sampleRate,
-                processed.numberOfChannels,
-                0.5
-            );
-
-
-        /*
-         * Encode in chunks
-         */
-
-        const chunkSize = 8192;
-
-
-        for(
-            let start = 0;
-            start < processed.length;
-            start += chunkSize
-        ){
-
-            const end =
-                Math.min(
-                    start + chunkSize,
-                    processed.length
-                );
-
-
+        const yieldToUi = () => new Promise((resolve) => setTimeout(resolve, 0));
+        async function encodeOgg(audioBuffer) {
+          if (typeof window.OggVorbisEncoder !== "function") throw new Error("Encoder OGG belum termuat. Periksa koneksi internet lalu coba lagi.");
+          const encoder = new window.OggVorbisEncoder(audioBuffer.sampleRate, audioBuffer.numberOfChannels, 0.45);
+          const chunkSize = Math.max(4096, Math.floor(audioBuffer.sampleRate * 0.25));
+          for (let offset = 0; offset < audioBuffer.length; offset += chunkSize) {
+            const end = Math.min(audioBuffer.length, offset + chunkSize);
             const channels = [];
-
-
-            for(
-                let channel = 0;
-                channel < processed.numberOfChannels;
-                channel++
-            ){
-
-                channels.push(
-                    processed
-                    .getChannelData(channel)
-                    .subarray(start,end)
-                );
-
-            }
-
-
+            for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) channels.push(audioBuffer.getChannelData(channel).slice(offset, end));
             encoder.encode(channels);
+            setProgress(72 + (offset / audioBuffer.length) * 24, "Meng-encode ke OGG Vorbis…");
+            await yieldToUi();
+          }
+          return encoder.finish("audio/ogg");
+        }
 
+        async function blobToDataUrl(blob) {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
+        }
 
-            const encodePercent =
-                65 +
-                Math.floor(
-                    (
-                        end /
-                        processed.length
-                    ) * 25
-                );
+        async function convertAudio() {
+          if (!selectedFile) return;
+          convert.disabled = true; progressWrap.classList.add("visible"); result.classList.remove("visible"); setProgress(5, "Membaca file audio…"); setMessage("");
+          try {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) throw new Error("Browser ini belum mendukung Web Audio API.");
+            const context = new AudioContextClass();
+            setProgress(15, "Mendekode audio…");
+            const sourceBuffer = await context.decodeAudioData(await selectedFile.arrayBuffer());
+            await context.close();
+            setProgress(42, `Menerapkan speed ${formatSpeed(speed)}…`);
+            const processedBuffer = await createSpeedBuffer(sourceBuffer);
+            setProgress(70, "Menyiapkan encoder…");
+            const blob = await encodeOgg(processedBuffer);
+            outputFileName = `${selectedFile.name.replace(/\.[^/.]+$/, "")}_${formatSpeed(speed)}.ogg`;
+            if (outputUrl) URL.revokeObjectURL(outputUrl);
+            outputUrl = URL.createObjectURL(blob);
+            $("audioPreview").src = outputUrl;
+            $("resultFileName").textContent = outputFileName;
+            $("specRate").textContent = `${processedBuffer.sampleRate.toLocaleString()} Hz`;
+            $("specChannels").textContent = `${processedBuffer.numberOfChannels} ch`;
+            $("specDuration").textContent = formatDuration(processedBuffer.duration);
+            $("specSize").textContent = formatBytes(blob.size);
+            $("specSpeed").textContent = formatSpeed(speed);
+            $("downloadButton").href = outputUrl;
+            $("downloadButton").download = outputFileName;
+            setProgress(100, "Konversi selesai.");
+            result.classList.add("visible");
+            setMessage("OGG siap dipreview dan didownload.");
+            result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          } catch (error) {
+            console.error(error);
+            setMessage(error?.message || "Konversi gagal. Coba file audio lain.", true);
+            setProgress(0, "Konversi gagal");
+          } finally {
+            convert.disabled = false;
+          }
+        }
+        convert.addEventListener("click", convertAudio);
 
-
-            setProgress(
-                encodePercent,
-                "Encoding OGG Vorbis..."
-            );
-
-
-            /*
-             * Give mobile browser
-             * a chance to breathe.
-             */
-
-            if(
-                start % (chunkSize * 8) === 0
-            ){
-
-                await sleep(0);
-
+        $("downloadButton").addEventListener("click", async (event) => {
+          if (!outputUrl) return;
+          if (window.ReactNativeWebView) {
+            event.preventDefault();
+            try {
+              const response = await fetch(outputUrl);
+              const dataUrl = await blobToDataUrl(await response.blob());
+              window.ReactNativeWebView.postMessage(JSON.stringify({ type: "download", fileName: outputFileName, dataUrl }));
+              setMessage("Menyiapkan file untuk dibagikan…");
+            } catch (error) {
+              setMessage("File belum dapat disiapkan untuk dibagikan.", true);
             }
-
-        }
-
-
-        /*
-         * Finish encoder
-         */
-
-        setProgress(
-            94,
-            "Menyelesaikan OGG..."
-        );
-
-
-        const blob =
-            encoder.finish(
-                "audio/ogg"
-            );
-
-
-        if(
-            !(blob instanceof Blob) ||
-            blob.size === 0
-        ){
-
-            throw new Error(
-                "Encoder menghasilkan file kosong."
-            );
-
-        }
-
-
-        /*
-         * Cleanup old URL
-         */
-
-        if(outputURL){
-
-            URL.revokeObjectURL(
-                outputURL
-            );
-
-        }
-
-
-        outputURL =
-            URL.createObjectURL(blob);
-
-
-        /*
-         * Preview
-         */
-
-        preview.src =
-            outputURL;
-
-
-        /*
-         * Download filename
-         */
-
-        const originalName =
-            selectedFile.name
-            .replace(/\.[^/.]+$/,"");
-
-
-        const finalName =
-            originalName +
-            "_" +
-            selectedSpeed.toFixed(1) +
-            "x.ogg";
-
-
-        download.href =
-            outputURL;
-
-        download.download =
-            finalName;
-
-
-        setProgress(
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
