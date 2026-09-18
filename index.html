@@ -2,324 +2,508 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>XREXZOB Audio Tool</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090609">
+<title>XREXZOB AUDIO</title>
 
 <style>
 :root{
   color-scheme:dark;
-  --bg:#08080b;
-  --card:#131319;
-  --card2:#1b1b23;
-  --line:#2b2b36;
-  --text:#fff;
-  --muted:#92929f;
-  --accent:#ff334f;
-  --accent2:#ff806d;
+  --bg:#090609;
+  --card:#160c10;
+  --card2:#211016;
+  --line:rgba(255,80,100,.20);
+  --red:#ff3347;
+  --red2:#bc1029;
+  --orange:#ff806d;
+  --text:#fff5f6;
+  --muted:#b79ca2;
 }
+
 *{box-sizing:border-box}
+
 body{
   margin:0;
   min-height:100vh;
-  padding:20px 15px 40px;
-  font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
+  padding:20px 15px 35px;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 10% 0%,#351019 0,transparent 35%),
-    radial-gradient(circle at 100% 20%,#24101a 0,transparent 35%),
+    radial-gradient(circle at 10% 0%,rgba(255,30,55,.25),transparent 30rem),
+    radial-gradient(circle at 100% 20%,rgba(150,10,35,.2),transparent 28rem),
     var(--bg);
 }
-.app{max-width:900px;margin:auto}
-header{
-  display:flex;justify-content:space-between;align-items:center;
-  margin:5px 0 25px
-}
-.logo{display:flex;align-items:center;gap:12px}
-.logo-icon{
-  width:43px;height:43px;border-radius:13px;
-  display:grid;place-items:center;
-  background:linear-gradient(135deg,#ff1737,#ff806d);
-  font-weight:900;box-shadow:0 0 30px #ff174455
-}
-.logo small{display:block;color:var(--accent);font-size:10px;font-weight:900;letter-spacing:.15em}
-.logo h1{margin:3px 0;font-size:21px}
-.badge{font-size:11px;color:#aaa;border:1px solid var(--line);padding:8px 11px;border-radius:20px}
 
-.hero{margin-bottom:20px}
+.shell{
+  width:min(900px,100%);
+  margin:auto;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin:8px 0 25px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.logo{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:linear-gradient(135deg,#ff102f,#ff806d);
+  font-weight:1000;
+  box-shadow:0 0 30px rgba(255,40,65,.3);
+}
+
+.eyebrow{
+  color:var(--red);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.15em;
+}
+
+h1{
+  margin:3px 0 0;
+  font-size:25px;
+}
+
+.private{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.hero{
+  margin-bottom:18px;
+}
+
 .hero h2{
-  font-size:clamp(31px,7vw,58px);
-  line-height:.98;letter-spacing:-.06em;margin:0
+  margin:0;
+  max-width:700px;
+  font-size:clamp(32px,7vw,58px);
+  line-height:.98;
+  letter-spacing:-.06em;
 }
-.hero h2 span{color:var(--accent)}
-.hero p{color:var(--muted);font-size:13px;line-height:1.6;max-width:620px}
 
-.grid{display:grid;grid-template-columns:1.25fr .85fr;gap:15px}
-.card{
-  background:#111116dd;
+.hero h2 span{
+  color:var(--red);
+}
+
+.hero p{
+  color:var(--muted);
+  line-height:1.6;
+  font-size:13px;
+  max-width:600px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(280px,.8fr);
+  gap:16px;
+}
+
+.panel{
+  padding:20px;
   border:1px solid var(--line);
-  border-radius:21px;padding:18px;
-  box-shadow:0 25px 70px #0008;
-  backdrop-filter:blur(15px)
+  border-radius:20px;
+  background:rgba(22,12,16,.92);
+  box-shadow:0 24px 70px rgba(0,0,0,.45);
 }
+
 .title{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:15px;font-weight:800;font-size:14px
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+  font-size:14px;
+  font-weight:850;
 }
-.chip{
-  color:var(--accent);
-  background:#ff334f15;
-  border:1px solid #ff334f44;
-  border-radius:20px;padding:5px 8px;font-size:9px
+
+.badge{
+  color:var(--red);
+  border:1px solid rgba(255,50,70,.3);
+  background:rgba(255,40,60,.08);
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:9px;
 }
 
 .drop{
-  min-height:190px;border:1px dashed #ff334f77;border-radius:16px;
-  display:grid;place-items:center;text-align:center;padding:20px;
-  background:#ff334f08;transition:.2s
+  min-height:190px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:25px;
+  border:1px dashed rgba(255,60,80,.55);
+  border-radius:16px;
+  background:rgba(255,40,60,.06);
 }
-.drop:hover,.drop.drag{background:#ff334f16;border-color:var(--accent)}
-.drop-icon{
-  width:50px;height:50px;margin:auto auto 12px;
-  display:grid;place-items:center;border-radius:15px;
-  background:#ff334f16;color:var(--accent);font-size:23px
-}
-.drop strong{font-size:14px}
-.drop p{color:var(--muted);font-size:11px;margin:7px 0 13px}
-.browse,.convert,.download{
-  border:0;border-radius:10px;padding:11px 14px;
-  font-weight:900;font-size:11px;cursor:pointer
-}
-.browse{color:white;background:#ff334f18;border:1px solid #ff334f55}
-#fileInput{display:none}
 
-.files{display:grid;gap:8px;margin-top:12px}
+.drop.drag{
+  border-color:var(--red);
+  background:rgba(255,40,60,.15);
+}
+
+.upload{
+  width:52px;
+  height:52px;
+  display:grid;
+  place-items:center;
+  margin:auto auto 12px;
+  border-radius:15px;
+  color:var(--red);
+  background:rgba(255,40,60,.12);
+  font-size:24px;
+}
+
+.drop strong{
+  display:block;
+  font-size:14px;
+}
+
+.drop p{
+  color:var(--muted);
+  font-size:11px;
+  margin:7px 0 13px;
+}
+
+.browse,.convert,.clear{
+  border:0;
+  border-radius:9px;
+  padding:10px 14px;
+  font-weight:850;
+}
+
+.browse{
+  color:#fff;
+  background:rgba(255,40,60,.15);
+  border:1px solid rgba(255,60,80,.45);
+}
+
+#fileInput{
+  display:none;
+}
+
+.files{
+  display:grid;
+  gap:9px;
+  margin-top:13px;
+  max-height:320px;
+  overflow:auto;
+}
+
 .file{
-  padding:11px;border:1px solid var(--line);border-radius:12px;
-  background:#ffffff05;display:flex;gap:10px;align-items:center
+  padding:11px;
+  display:grid;
+  grid-template-columns:35px 1fr auto;
+  gap:10px;
+  align-items:center;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(255,255,255,.025);
 }
-.file-info{min-width:0;flex:1}
-.file-name{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.file-meta{font-size:10px;color:var(--muted);margin-top:3px}
+
+.fileicon{
+  width:35px;
+  height:35px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:rgba(255,100,70,.1);
+}
+
+.name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:750;
+}
+
+.size{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
 .remove{
-  border:0;background:none;color:#888;cursor:pointer;font-size:16px
+  width:28px;
+  height:28px;
+  border:0;
+  border-radius:8px;
+  color:var(--muted);
+  background:transparent;
 }
 
-.controls{display:grid;gap:17px}
-.control label{
-  display:flex;justify-content:space-between;
-  color:#aaa;font-size:11px;font-weight:700;margin-bottom:7px
+.controls{
+  display:grid;
+  gap:18px;
 }
-.value{color:var(--accent);font-weight:900}
-input[type=range]{width:100%;accent-color:var(--accent)}
-input[type=number]{
-  width:100%;padding:10px;border:1px solid var(--line);
-  border-radius:9px;background:#ffffff08;color:white;outline:none
-}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.presets{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.preset{
-  padding:9px 5px;border-radius:9px;border:1px solid var(--line);
-  background:#ffffff04;color:#aaa;font-size:10px;font-weight:800;cursor:pointer
-}
-.preset.active{background:var(--accent);border-color:var(--accent);color:#fff}
 
-.actions{margin-top:15px}
+.control h3{
+  margin:0 0 9px;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+}
+
+.option{
+  min-height:39px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  color:var(--muted);
+  background:rgba(255,255,255,.035);
+  font-size:11px;
+  font-weight:800;
+}
+
+.option.active{
+  color:#fff;
+  border-color:var(--red);
+  background:var(--red);
+  box-shadow:0 0 16px rgba(255,40,60,.2);
+}
+
 .convert{
-  width:100%;padding:14px;
-  color:white;background:linear-gradient(100deg,#d91532,#ff4057,#ff806d);
-  box-shadow:0 10px 30px #ff334f22
+  width:100%;
+  margin-top:15px;
+  padding:14px;
+  color:white;
+  background:linear-gradient(105deg,#d91632,#ff4255,#ff806d);
+  font-size:12px;
 }
-.convert:disabled{opacity:.4;cursor:not-allowed}
 
-.progress{display:none;margin-top:13px}
-.progress.show{display:block}
-.progress-top{display:flex;justify-content:space-between;color:#aaa;font-size:10px;margin-bottom:6px}
-.track{height:6px;background:#24242d;border-radius:20px;overflow:hidden}
-.fill{height:100%;width:0;background:linear-gradient(90deg,#d91532,#ff334f,#ff806d);transition:.2s}
-
-.result{display:none;margin-top:15px}
-.result.show{display:block}
-.result-item{
-  border:1px solid var(--line);border-radius:13px;
-  padding:12px;margin-top:9px;background:#ffffff04
+.convert:disabled{
+  opacity:.4;
 }
-.result-name{font-size:12px;font-weight:800}
-.result-meta{font-size:10px;color:#888;margin-top:3px}
-audio{width:100%;margin-top:9px;height:38px}
+
+.status{
+  min-height:18px;
+  margin-top:10px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.results{
+  display:none;
+  margin-top:16px;
+}
+
+.results.show{
+  display:block;
+}
+
+.result{
+  padding:13px;
+  margin-top:9px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:rgba(255,255,255,.025);
+}
+
+.result-name{
+  font-size:12px;
+  font-weight:800;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+audio{
+  width:100%;
+  margin-top:10px;
+}
+
 .download{
-  display:block;text-align:center;text-decoration:none;
-  margin-top:8px;color:white;background:#ff334f
-}
-.reset{
-  width:100%;margin-top:8px;padding:10px;
-  border-radius:9px;border:1px solid var(--line);
-  background:#ffffff05;color:#aaa;font-size:10px;font-weight:800
-}
-.notice{
-  margin-top:15px;color:#777;font-size:10px;line-height:1.5
+  display:block;
+  text-align:center;
+  margin-top:9px;
+  padding:10px;
+  border-radius:9px;
+  color:var(--orange);
+  border:1px solid rgba(255,128,109,.35);
+  text-decoration:none;
+  font-size:11px;
+  font-weight:850;
 }
 
 @media(max-width:720px){
-  .grid{grid-template-columns:1fr}
-  .badge{display:none}
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .panel{
+    padding:16px;
+  }
+}
+
+@media(max-width:380px){
+  .buttons{
+    grid-template-columns:repeat(3,1fr);
+  }
 }
 </style>
 </head>
 
 <body>
-<div class="app">
 
-<header>
-  <div class="logo">
-    <div class="logo-icon">X</div>
+<main class="shell">
+
+<header class="top">
+  <div class="brand">
+    <div class="logo">X</div>
     <div>
-      <small>AUDIO DEVELOPER</small>
+      <div class="eyebrow">LOCAL AUDIO TOOL</div>
       <h1>XREXZOB AUDIO</h1>
     </div>
   </div>
-  <div class="badge">LOCAL PROCESSING</div>
+  <div class="private">● LOCAL</div>
 </header>
 
 <section class="hero">
-  <h2>Control your<br><span>audio.</span></h2>
+  <div class="eyebrow">AUDIO EDITOR</div>
+  <h2>Atur audio dengan<br><span>angka pilihanmu.</span></h2>
   <p>
-    Atur speed, pitch, volume, bass, treble, dan bagian audio
-    langsung dari browser.
+    Upload file audio, pilih speed, pitch, volume, bass, dan treble
+    menggunakan tombol angka. Pemrosesan dilakukan langsung di browser.
   </p>
 </section>
 
-<div class="grid">
+<section class="grid">
 
-<section class="card">
+<div class="panel">
+
   <div class="title">
-    <span>01 · UPLOAD AUDIO</span>
-    <span class="chip" id="count">0 FILE</span>
+    <span>01 — UPLOAD AUDIO</span>
+    <span class="badge" id="count">0 FILE</span>
   </div>
 
   <div class="drop" id="drop">
     <div>
-      <div class="drop-icon">♫</div>
-      <strong>Masukkan file audio</strong>
-      <p>MP3 · WAV · OGG · M4A · AAC · FLAC</p>
+      <div class="upload">↑</div>
+      <strong>Pilih file audio</strong>
+      <p>MP3, WAV, OGG, M4A, AAC, atau FLAC</p>
       <button class="browse" id="browse">PILIH FILE</button>
     </div>
-    <input id="fileInput" type="file" multiple
-      accept=".mp3,.wav,.ogg,.m4a,.aac,.flac,audio/*">
+
+    <input
+      id="fileInput"
+      type="file"
+      multiple
+      accept=".mp3,.wav,.ogg,.m4a,.aac,.flac,audio/*"
+    >
   </div>
 
   <div class="files" id="files"></div>
 
-  <div class="actions">
-    <button class="convert" id="convert" disabled>
-      ⚡ PROSES AUDIO
-    </button>
+  <button class="convert" id="convert" disabled>
+    KONVERSI AUDIO
+  </button>
+
+  <div class="status" id="status"></div>
+
+  <div class="results" id="results">
+    <div class="title">HASIL AUDIO</div>
+    <div id="resultList"></div>
   </div>
 
-  <div class="progress" id="progress">
-    <div class="progress-top">
-      <span id="progressText">Memproses...</span>
-      <span id="percent">0%</span>
-    </div>
-    <div class="track"><div class="fill" id="fill"></div></div>
-  </div>
-
-  <div class="result" id="result">
-    <div class="title">HASIL</div>
-    <div id="results"></div>
-  </div>
-</section>
+</div>
 
 
-<section class="card">
+<div class="panel">
+
   <div class="title">
-    <span>02 · AUDIO CONTROL</span>
-    <span class="chip">LIVE</span>
+    <span>02 — AUDIO CONTROL</span>
+    <span class="badge">NUMBER</span>
   </div>
 
   <div class="controls">
 
     <div class="control">
-      <label>
-        <span>Speed</span>
-        <span class="value" id="speedValue">1.00×</span>
-      </label>
-
-      <div class="presets">
-        <button class="preset active" data-speed="1">1.00×</button>
-        <button class="preset" data-speed="1.25">1.25×</button>
-        <button class="preset" data-speed="1.5">1.50×</button>
-        <button class="preset" data-speed="1.75">1.75×</button>
-        <button class="preset" data-speed="2">2.00×</button>
-        <button class="preset" data-speed=".75">0.75×</button>
+      <h3>SPEED</h3>
+      <div class="buttons" data-type="speed">
+        <button class="option" data-value=".50">0.50x</button>
+        <button class="option" data-value=".75">0.75x</button>
+        <button class="option active" data-value="1">1.00x</button>
+        <button class="option" data-value="1.25">1.25x</button>
+        <button class="option" data-value="1.50">1.50x</button>
+        <button class="option" data-value="1.75">1.75x</button>
+        <button class="option" data-value="2">2.00x</button>
       </div>
-
-      <input id="speed" type="range" min=".25" max="4" step=".01" value="1">
     </div>
 
-
     <div class="control">
-      <label>
-        <span>Pitch / Nada</span>
-        <span class="value" id="pitchValue">0 semitone</span>
-      </label>
-      <input id="pitch" type="range" min="-12" max="12" step=".1" value="0">
+      <h3>PITCH / NADA</h3>
+      <div class="buttons" data-type="pitch">
+        <button class="option" data-value="-4">-4</button>
+        <button class="option" data-value="-3">-3</button>
+        <button class="option" data-value="-2">-2</button>
+        <button class="option" data-value="-1">-1</button>
+        <button class="option active" data-value="0">0</button>
+        <button class="option" data-value="1">+1</button>
+        <button class="option" data-value="2">+2</button>
+        <button class="option" data-value="3">+3</button>
+        <button class="option" data-value="4">+4</button>
+      </div>
     </div>
 
-
     <div class="control">
-      <label>
-        <span>Volume / Gain</span>
-        <span class="value" id="volumeValue">100%</span>
-      </label>
-      <input id="volume" type="range" min="0" max="200" step="1" value="100">
+      <h3>VOLUME</h3>
+      <div class="buttons" data-type="volume">
+        <button class="option" data-value="50">50%</button>
+        <button class="option" data-value="75">75%</button>
+        <button class="option active" data-value="100">100%</button>
+        <button class="option" data-value="125">125%</button>
+        <button class="option" data-value="150">150%</button>
+      </div>
     </div>
 
-
     <div class="control">
-      <label>
-        <span>Bass</span>
-        <span class="value" id="bassValue">0 dB</span>
-      </label>
-      <input id="bass" type="range" min="-12" max="12" step=".5" value="0">
+      <h3>BASS</h3>
+      <div class="buttons" data-type="bass">
+        <button class="option" data-value="-6">-6 dB</button>
+        <button class="option" data-value="-3">-3 dB</button>
+        <button class="option active" data-value="0">0 dB</button>
+        <button class="option" data-value="3">+3 dB</button>
+        <button class="option" data-value="6">+6 dB</button>
+      </div>
     </div>
 
-
     <div class="control">
-      <label>
-        <span>Treble</span>
-        <span class="value" id="trebleValue">0 dB</span>
-      </label>
-      <input id="treble" type="range" min="-12" max="12" step=".5" value="0">
-    </div>
-
-
-    <div class="control">
-      <label><span>Trim Audio</span></label>
-      <div class="row">
-        <input id="trimStart" type="number" min="0" step=".1" value="0" placeholder="Start">
-        <input id="trimEnd" type="number" min="0" step=".1" value="0" placeholder="End">
+      <h3>TREBLE</h3>
+      <div class="buttons" data-type="treble">
+        <button class="option" data-value="-6">-6 dB</button>
+        <button class="option" data-value="-3">-3 dB</button>
+        <button class="option active" data-value="0">0 dB</button>
+        <button class="option" data-value="3">+3 dB</button>
+        <button class="option" data-value="6">+6 dB</button>
       </div>
     </div>
 
   </div>
 
-  <button class="reset" id="reset">RESET SEMUA PENGATURAN</button>
+</div>
 
-  <div class="notice">
-    Pengaturan audio diproses secara lokal di browser.
-    Gunakan hanya audio yang memang kamu punya hak/izin untuk digunakan.
-  </div>
 </section>
-
-</div>
-</div>
+</main>
 
 
 <script>
-const $ = id => document.getElementById(id);
-
-const state = {
-  files: [],
+const settings = {
   speed: 1,
   pitch: 0,
   volume: 100,
@@ -327,272 +511,277 @@ const state = {
   treble: 0
 };
 
-$("browse").onclick = () => $("fileInput").click();
+let queue = [];
 
-$("fileInput").onchange = e => {
+const input = document.getElementById("fileInput");
+const browse = document.getElementById("browse");
+const drop = document.getElementById("drop");
+const filesEl = document.getElementById("files");
+const countEl = document.getElementById("count");
+const convertBtn = document.getElementById("convert");
+const statusEl = document.getElementById("status");
+const resultsEl = document.getElementById("results");
+const resultList = document.getElementById("resultList");
+
+browse.onclick = () => input.click();
+
+input.onchange = e => {
   addFiles([...e.target.files]);
-  e.target.value = "";
+  input.value = "";
 };
 
-const drop = $("drop");
+drop.onclick = e => {
+  if(e.target.closest("button")) return;
+  input.click();
+};
 
-drop.addEventListener("dragover", e => {
-  e.preventDefault();
-  drop.classList.add("drag");
+["dragenter","dragover"].forEach(type => {
+  drop.addEventListener(type,e => {
+    e.preventDefault();
+    drop.classList.add("drag");
+  });
 });
 
-drop.addEventListener("dragleave", () => drop.classList.remove("drag"));
+["dragleave","drop"].forEach(type => {
+  drop.addEventListener(type,e => {
+    e.preventDefault();
+    drop.classList.remove("drag");
+  });
+});
 
-drop.addEventListener("drop", e => {
-  e.preventDefault();
-  drop.classList.remove("drag");
+drop.addEventListener("drop",e => {
   addFiles([...e.dataTransfer.files]);
 });
 
-function addFiles(files){
-  const audio = files.filter(f =>
+function addFiles(list){
+
+  const audioFiles = list.filter(f =>
     f.type.startsWith("audio/") ||
     /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(f.name)
   );
 
-  state.files.push(...audio);
+  queue.push(...audioFiles);
+
+  if(queue.length > 30){
+    queue = queue.slice(0,30);
+  }
+
   renderFiles();
 }
 
 function renderFiles(){
-  $("files").innerHTML = "";
 
-  state.files.forEach((file,i)=>{
+  filesEl.innerHTML = "";
+
+  queue.forEach((file,index) => {
+
     const el = document.createElement("div");
     el.className = "file";
 
     el.innerHTML = `
-      <div>🎵</div>
-      <div class="file-info">
-        <div class="file-name">${escapeHTML(file.name)}</div>
-        <div class="file-meta">${formatBytes(file.size)}</div>
+      <div class="fileicon">♪</div>
+      <div>
+        <div class="name">${escapeHTML(file.name)}</div>
+        <div class="size">${formatBytes(file.size)}</div>
       </div>
-      <button class="remove" data-i="${i}">×</button>
+      <button class="remove" data-index="${index}">×</button>
     `;
 
-    el.querySelector(".remove").onclick = () => {
-      state.files.splice(i,1);
+    filesEl.appendChild(el);
+  });
+
+  countEl.textContent = `${queue.length} FILE`;
+  convertBtn.disabled = queue.length === 0;
+
+  filesEl.querySelectorAll(".remove").forEach(btn => {
+    btn.onclick = () => {
+      queue.splice(Number(btn.dataset.index),1);
       renderFiles();
     };
+  });
+}
 
-    $("files").appendChild(el);
+document.querySelectorAll(".buttons").forEach(group => {
+
+  const type = group.dataset.type;
+
+  group.querySelectorAll(".option").forEach(btn => {
+
+    btn.onclick = () => {
+
+      group.querySelectorAll(".option")
+        .forEach(x => x.classList.remove("active"));
+
+      btn.classList.add("active");
+
+      settings[type] = Number(btn.dataset.value);
+
+      statusEl.textContent =
+        `${type.toUpperCase()} = ${btn.textContent}`;
+    };
+
   });
 
-  $("count").textContent = state.files.length + " FILE";
-  $("convert").disabled = state.files.length === 0;
-}
-
-function escapeHTML(str){
-  return str.replace(/[&<>"']/g,m=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-  }[m]));
-}
-
-function formatBytes(bytes){
-  if(bytes < 1024) return bytes+" B";
-  if(bytes < 1024*1024) return (bytes/1024).toFixed(1)+" KB";
-  return (bytes/1024/1024).toFixed(2)+" MB";
-}
-
-
-/* SPEED */
-document.querySelectorAll(".preset").forEach(btn=>{
-  btn.onclick = ()=>{
-    document.querySelectorAll(".preset").forEach(x=>x.classList.remove("active"));
-    btn.classList.add("active");
-
-    $("speed").value = btn.dataset.speed;
-    state.speed = Number(btn.dataset.speed);
-    $("speedValue").textContent = state.speed.toFixed(2)+"×";
-  };
 });
 
-$("speed").oninput = e=>{
-  state.speed = Number(e.target.value);
-  $("speedValue").textContent = state.speed.toFixed(2)+"×";
 
-  document.querySelectorAll(".preset").forEach(x=>{
-    x.classList.toggle("active", Number(x.dataset.speed) === state.speed);
-  });
-};
+convertBtn.onclick = async () => {
 
+  if(!queue.length) return;
 
-/* PITCH */
-$("pitch").oninput = e=>{
-  state.pitch = Number(e.target.value);
-  const n = state.pitch;
-  $("pitchValue").textContent =
-    (n > 0 ? "+" : "") + n.toFixed(1) + " semitone";
-};
+  convertBtn.disabled = true;
+  resultsEl.classList.add("show");
+  resultList.innerHTML = "";
 
+  for(let i=0;i<queue.length;i++){
 
-/* VOLUME */
-$("volume").oninput = e=>{
-  state.volume = Number(e.target.value);
-  $("volumeValue").textContent = state.volume+"%";
-};
+    const file = queue[i];
 
+    statusEl.textContent =
+      `Memproses ${i+1}/${queue.length}: ${file.name}`;
 
-/* BASS */
-$("bass").oninput = e=>{
-  state.bass = Number(e.target.value);
-  $("bassValue").textContent =
-    (state.bass > 0 ? "+" : "") + state.bass + " dB";
-};
+    try{
 
+      const audio = await decodeAudio(file);
 
-/* TREBLE */
-$("treble").oninput = e=>{
-  state.treble = Number(e.target.value);
-  $("trebleValue").textContent =
-    (state.treble > 0 ? "+" : "") + state.treble + " dB";
-};
+      const processed = await processAudio(audio);
 
+      const wav = audioBufferToWav(processed);
 
-/* RESET */
-$("reset").onclick = ()=>{
-  $("speed").value=1;
-  $("pitch").value=0;
-  $("volume").value=100;
-  $("bass").value=0;
-  $("treble").value=0;
+      const blob = new Blob([wav],{
+        type:"audio/wav"
+      });
 
-  state.speed=1;
-  state.pitch=0;
-  state.volume=100;
-  state.bass=0;
-  state.treble=0;
+      const url = URL.createObjectURL(blob);
 
-  $("speedValue").textContent="1.00×";
-  $("pitchValue").textContent="0.0 semitone";
-  $("volumeValue").textContent="100%";
-  $("bassValue").textContent="0 dB";
-  $("trebleValue").textContent="0 dB";
+      const item = document.createElement("div");
+      item.className = "result";
 
-  document.querySelectorAll(".preset").forEach(x=>x.classList.remove("active"));
-  document.querySelector('[data-speed="1"]').classList.add("active");
-};
+      const outputName =
+        file.name.replace(/\.[^/.]+$/,"") + "_XREXZOB.wav";
 
+      item.innerHTML = `
+        <div class="result-name">${escapeHTML(outputName)}</div>
+        <audio controls src="${url}"></audio>
+        <a class="download"
+           href="${url}"
+           download="${escapeAttr(outputName)}">
+           DOWNLOAD AUDIO
+        </a>
+      `;
 
-/*
-  AUDIO ENGINE
-  Uses OfflineAudioContext so the processed
-  result can be rendered without uploading
-  the source file to a server.
-*/
+      resultList.appendChild(item);
 
-async function processAudio(file){
+    }catch(err){
 
-  const arrayBuffer = await file.arrayBuffer();
+      const item = document.createElement("div");
+      item.className = "result";
 
-  const decodeContext = new AudioContext();
+      item.innerHTML =
+        `<div class="result-name">
+          Gagal memproses: ${escapeHTML(file.name)}
+        </div>`;
 
-  let audioBuffer;
-
-  try{
-    audioBuffer = await decodeContext.decodeAudioData(arrayBuffer);
-  }finally{
-    await decodeContext.close();
+      resultList.appendChild(item);
+    }
   }
 
-  const start = Math.max(
-    0,
-    Number($("trimStart").value) || 0
-  );
+  statusEl.textContent =
+    `Selesai — ${queue.length} file diproses.`;
 
-  let end = Number($("trimEnd").value);
-
-  if(!end || end <= 0 || end > audioBuffer.duration){
-    end = audioBuffer.duration;
-  }
-
-  if(end <= start){
-    throw new Error("Trim start harus lebih kecil dari end.");
-  }
-
-  const duration = end - start;
-
-  const sampleRate = audioBuffer.sampleRate;
-  const channels = audioBuffer.numberOfChannels;
-
-  const outputDuration = duration / state.speed;
-
-  const offline = new OfflineAudioContext(
-    channels,
-    Math.ceil(outputDuration * sampleRate),
-    sampleRate
-  );
-
-  const source = offline.createBufferSource();
-  source.buffer = audioBuffer;
-
-  /*
-    Speed:
-    playbackRate mengubah durasi.
-  */
-  source.playbackRate.value = state.speed;
-
-  /*
-    Pitch:
-    detune menggeser nada dalam cents.
-    100 cents = 1 semitone.
-  */
-  source.detune.value = state.pitch * 100;
+  convertBtn.disabled = false;
+};
 
 
-  /*
-    Bass filter
-  */
-  const bass = offline.createBiquadFilter();
-  bass.type = "lowshelf";
-  bass.frequency.value = 180;
-  bass.gain.value = state.bass;
+async function decodeAudio(file){
 
+  const ctx = new AudioContext();
 
-  /*
-    Treble filter
-  */
-  const treble = offline.createBiquadFilter();
-  treble.type = "highshelf";
-  treble.frequency.value = 3500;
-  treble.gain.value = state.treble;
+  const buffer =
+    await file.arrayBuffer();
 
+  const decoded =
+    await ctx.decodeAudioData(buffer);
 
-  /*
-    Volume
-  */
-  const gain = offline.createGain();
-  gain.gain.value = state.volume / 100;
+  await ctx.close();
 
-
-  source
-    .connect(bass)
-    .connect(treble)
-    .connect(gain)
-    .connect(offline.destination);
-
-  source.start(0, start, duration);
-
-  const rendered = await offline.startRendering();
-
-  return audioBufferToWav(rendered);
+  return decoded;
 }
 
 
-/*
-  WAV encoder.
-  Output is WAV agar hasil pemrosesan
-  tidak bergantung pada encoder eksternal.
-*/
+async function processAudio(source){
+
+  const speed = settings.speed;
+
+  const inputLength = source.length;
+
+  const outputLength =
+    Math.max(1,Math.floor(inputLength / speed));
+
+  const channels = source.numberOfChannels;
+
+  const offline =
+    new OfflineAudioContext(
+      channels,
+      outputLength,
+      source.sampleRate
+    );
+
+  const buffer =
+    offline.createBuffer(
+      channels,
+      inputLength,
+      source.sampleRate
+    );
+
+  for(let c=0;c<channels;c++){
+
+    buffer.copyToChannel(
+      source.getChannelData(c),
+      c
+    );
+  }
+
+  const src =
+    offline.createBufferSource();
+
+  src.buffer = buffer;
+  src.playbackRate.value = speed;
+
+
+  const gain =
+    offline.createGain();
+
+  gain.gain.value =
+    settings.volume / 100;
+
+
+  const bass =
+    offline.createBiquadFilter();
+
+  bass.type = "lowshelf";
+  bass.frequency.value = 180;
+  bass.gain.value = settings.bass;
+
+
+  const treble =
+    offline.createBiquadFilter();
+
+  treble.type = "highshelf";
+  treble.frequency.value = 3500;
+  treble.gain.value = settings.treble;
+
+
+  src.connect(bass);
+  bass.connect(treble);
+  treble.connect(gain);
+  gain.connect(offline.destination);
+
+  src.start(0);
+
+  return await offline.startRendering();
+}
+
 
 function audioBufferToWav(buffer){
 
@@ -603,133 +792,111 @@ function audioBufferToWav(buffer){
   const bytesPerSample = 2;
   const blockAlign = channels * bytesPerSample;
 
-  const dataSize = length * blockAlign;
-  const bufferSize = 44 + dataSize;
+  const dataSize =
+    length * blockAlign;
 
-  const out = new ArrayBuffer(bufferSize);
-  const view = new DataView(out);
+  const out =
+    new ArrayBuffer(44 + dataSize);
+
+  const view =
+    new DataView(out);
 
   writeString(view,0,"RIFF");
-  view.setUint32(4,36+dataSize,true);
+  view.setUint32(4,36 + dataSize,true);
   writeString(view,8,"WAVE");
-
   writeString(view,12,"fmt ");
+
   view.setUint32(16,16,true);
   view.setUint16(20,1,true);
   view.setUint16(22,channels,true);
   view.setUint32(24,sampleRate,true);
-  view.setUint32(28,sampleRate*blockAlign,true);
+  view.setUint32(
+    28,
+    sampleRate * blockAlign,
+    true
+  );
   view.setUint16(32,blockAlign,true);
   view.setUint16(34,16,true);
 
   writeString(view,36,"data");
   view.setUint32(40,dataSize,true);
 
-  let offset=44;
+  let offset = 44;
 
-  const channelData=[];
+  const data = [];
 
   for(let c=0;c<channels;c++){
-    channelData.push(buffer.getChannelData(c));
+    data.push(buffer.getChannelData(c));
   }
 
   for(let i=0;i<length;i++){
+
     for(let c=0;c<channels;c++){
 
-      let sample=channelData[c][i];
+      let sample =
+        Math.max(
+          -1,
+          Math.min(
+            1,
+            data[c][i]
+          )
+        );
 
-      sample=Math.max(-1,Math.min(1,sample));
-
-      const value =
+      view.setInt16(
+        offset,
         sample < 0
-          ? sample * 0x8000
-          : sample * 0x7fff;
+          ? sample * 32768
+          : sample * 32767,
+        true
+      );
 
-      view.setInt16(offset,value,true);
-      offset+=2;
+      offset += 2;
     }
   }
 
-  return new Blob([out],{type:"audio/wav"});
+  return out;
 }
+
 
 function writeString(view,offset,string){
+
   for(let i=0;i<string.length;i++){
-    view.setUint8(offset+i,string.charCodeAt(i));
+    view.setUint8(
+      offset+i,
+      string.charCodeAt(i)
+    );
   }
 }
 
 
-/* PROCESS */
+function formatBytes(bytes){
 
-$("convert").onclick = async ()=>{
+  if(bytes < 1024)
+    return bytes + " B";
 
-  if(!state.files.length) return;
+  if(bytes < 1024*1024)
+    return (bytes/1024).toFixed(1)+" KB";
 
-  $("convert").disabled=true;
-  $("progress").classList.add("show");
-  $("result").classList.remove("show");
-  $("results").innerHTML="";
+  return (bytes/1024/1024).toFixed(2)+" MB";
+}
 
-  const total=state.files.length;
 
-  for(let i=0;i<total;i++){
+function escapeHTML(str){
 
-    const file=state.files[i];
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
 
-    const pct=Math.round((i/total)*100);
 
-    $("percent").textContent=pct+"%";
-    $("fill").style.width=pct+"%";
-    $("progressText").textContent=
-      "Memproses "+(i+1)+" / "+total+" · "+file.name;
+function escapeAttr(str){
+  return escapeHTML(str);
+}
 
-    try{
-
-      const blob=await processAudio(file);
-
-      const url=URL.createObjectURL(blob);
-
-      const item=document.createElement("div");
-      item.className="result-item";
-
-      const safeName =
-        file.name.replace(/\.[^/.]+$/,"")+"_processed.wav";
-
-      item.innerHTML=`
-        <div class="result-name">${escapeHTML(safeName)}</div>
-        <div class="result-meta">${formatBytes(blob.size)} · WAV</div>
-        <audio controls src="${url}"></audio>
-        <a class="download" download="${escapeHTML(safeName)}" href="${url}">
-          DOWNLOAD HASIL
-        </a>
-      `;
-
-      $("results").appendChild(item);
-
-    }catch(err){
-
-      const item=document.createElement("div");
-      item.className="result-item";
-
-      item.innerHTML=`
-        <div class="result-name">${escapeHTML(file.name)}</div>
-        <div class="result-meta" style="color:#ff6b78">
-          Gagal diproses: ${escapeHTML(err.message)}
-        </div>
-      `;
-
-      $("results").appendChild(item);
-    }
-  }
-
-  $("percent").textContent="100%";
-  $("fill").style.width="100%";
-  $("progressText").textContent="Selesai";
-
-  $("result").classList.add("show");
-  $("convert").disabled=false;
-};
+renderFiles();
 </script>
 
 </body>
