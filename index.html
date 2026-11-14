@@ -1,166 +1,161 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crypto Trading Simulator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FILEHUB - File Sharing</title>
 <style>
-:root{--bg:#0b0e11;--panel:#151a21;--panel2:#1e2329;--line:#2b3139;--muted:#848e9c;--text:#eaecef;--green:#0ecb81;--red:#f6465d;--yellow:#f0b90b}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px Inter,system-ui,Arial,sans-serif}
-header{height:62px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#0b0e11;position:sticky;top:0;z-index:5}
-.logo{font-size:20px;font-weight:800;letter-spacing:.4px}.logo span{color:var(--yellow)}
-nav{display:flex;gap:22px;color:#c5cbd3}nav a{color:inherit;text-decoration:none}nav a:first-child{color:var(--yellow)}
-.topright{display:flex;align-items:center;gap:12px}.demo{border:1px solid #245d48;color:var(--green);padding:6px 10px;border-radius:5px;font-size:11px;font-weight:700}
-button{cursor:pointer;border:0;font-weight:700;border-radius:5px;padding:10px 15px;color:white}.reset{background:var(--panel2);border:1px solid var(--line);font-size:12px}
-main{max-width:1440px;margin:auto;padding:22px}
-h1{font-size:22px;margin:0 0 5px}.sub{color:var(--muted);font-size:12px;margin-bottom:20px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:15px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;min-width:0}
-.stat-label{color:var(--muted);font-size:12px;margin-bottom:9px}.stat-value{font-size:22px;font-weight:750}.positive{color:var(--green)}.negative{color:var(--red)}
-.layout{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(290px,.85fr);gap:14px}
-.chart-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.coin-title{font-size:17px;font-weight:750}.coin-title small{color:var(--muted);font-size:12px;font-weight:500}
-.price{font-size:22px;font-weight:750;margin-top:13px}.change{font-size:12px;margin-top:4px}
-.timebuttons{display:flex;gap:4px}.timebuttons button{background:transparent;color:var(--muted);padding:6px 9px;font-size:11px}.timebuttons button.active{background:#333b45;color:var(--yellow)}
-canvas{width:100%;height:280px;display:block;margin-top:12px}
-.market{margin-top:14px}.section-title{font-size:15px;font-weight:750;margin-bottom:13px}
-table{width:100%;border-collapse:collapse;white-space:nowrap}th{text-align:left;color:var(--muted);font-size:11px;font-weight:500;padding:10px 8px;border-bottom:1px solid var(--line)}td{padding:12px 8px;border-bottom:1px solid #242a32;font-size:12px}tr:last-child td{border:0}tbody tr{cursor:pointer}tbody tr:hover{background:#20262e}
-.asset{display:flex;align-items:center;gap:9px;font-weight:700}.coin-icon{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#343b45;font-size:12px}.asset small{display:block;color:var(--muted);font-weight:400;margin-top:2px}
-.trade-tabs{display:flex;border-bottom:1px solid var(--line);margin:-2px -2px 15px}.trade-tabs button{flex:1;background:transparent;color:var(--muted);border-radius:0;padding:12px}.trade-tabs button.active.buy{color:var(--green);border-bottom:2px solid var(--green)}.trade-tabs button.active.sell{color:var(--red);border-bottom:2px solid var(--red)}
-label{display:block;color:var(--muted);font-size:12px;margin:14px 0 7px}.inputwrap{display:flex;background:#0b0e11;border:1px solid var(--line);border-radius:5px;align-items:center;padding:0 10px}.inputwrap input{width:100%;background:transparent;color:var(--text);border:0;outline:0;padding:12px 0;font-size:14px}.inputwrap span{color:var(--muted);font-size:11px}
-.quick{display:flex;gap:6px;margin-top:8px}.quick button{flex:1;background:var(--panel2);color:#c4cbd3;padding:7px 3px;font-size:11px}
-.summary{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:16px}.summary strong{color:var(--text)}
-.trade-submit{width:100%;margin-top:16px;padding:13px;font-size:14px}.trade-submit.buy{background:var(--green);color:#071b13}.trade-submit.sell{background:var(--red)}
-.notice{font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px}
-.history{margin-top:14px}.empty{text-align:center;color:var(--muted);padding:22px}
-@media(max-width:850px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}nav{display:none}}
-@media(max-width:480px){main{padding:14px}.stats{gap:8px}.card{padding:12px}.stat-value{font-size:18px}header{padding:0 14px}.topright .reset{display:none}canvas{height:220px}}
+*{box-sizing:border-box}
+body{margin:0;background:#080d18;color:#eef3ff;font-family:Arial,sans-serif}
+header{padding:22px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #24314a}
+.logo{font-size:24px;font-weight:bold;letter-spacing:2px}
+.logo span{color:#5795ff}
+.status{color:#5ce0a0;font-size:12px}
+main{max-width:1100px;margin:40px auto;padding:0 18px}
+h1{font-size:42px;margin-bottom:8px}
+p{color:#91a2bd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:#111a2b;border:1px solid #293954;border-radius:18px;padding:22px}
+.card h2{margin-top:0}
+.upload{border:2px dashed #49658d;border-radius:15px;padding:35px 15px;text-align:center;background:#152238}
+button,.pick{background:#5795ff;color:white;border:0;padding:12px 17px;border-radius:10px;font-weight:bold;cursor:pointer}
+input,textarea{width:100%;padding:13px;border:1px solid #344563;border-radius:10px;background:#0a1424;color:white;margin:8px 0}
+input[type=file]{display:none}
+.file{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #293954}
+.fileinfo{flex:1;min-width:0;overflow-wrap:anywhere}
+.file a{color:#79aaff;text-decoration:none}
+.message{background:#1b2940;border-radius:12px;padding:12px;margin:12px 0;overflow-wrap:anywhere}
+.copy{padding:7px 12px;margin-top:8px;background:#304667}
+.preview{max-width:100%;max-height:220px;border-radius:10px;margin-top:10px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}h1{font-size:32px}main{margin:25px auto}header{padding:18px}}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo"><span>◆</span> CRYPTO</div>
-  <nav><a href="#">Markets</a><a href="#market">Spot</a><a href="#portfolio">Portfolio</a></nav>
-  <div class="topright"><span class="demo">● MODE SIMULASI</span><button class="reset" onclick="resetAccount()">Reset akun</button></div>
+ <div class="logo">FILE<span>HUB</span></div>
+ <div class="status">● ONLINE</div>
 </header>
+
 <main>
-  <h1>Dashboard Trading</h1>
-  <div class="sub">Pasar aset digital · Data harga simulasi untuk latihan</div>
-  <section class="stats">
-    <div class="card"><div class="stat-label">Total Estimasi Aset</div><div class="stat-value" id="total">Rp100.000.000</div></div>
-    <div class="card"><div class="stat-label">Saldo Tersedia</div><div class="stat-value" id="cash">Rp100.000.000</div></div>
-    <div class="card"><div class="stat-label">Profit / Loss</div><div class="stat-value positive" id="pnl">Rp0 (0.00%)</div></div>
-    <div class="card"><div class="stat-label">Jumlah Aset</div><div class="stat-value" id="assetCount">0</div></div>
+ <h1>Share Anything.</h1>
+ <p>Tempat berbagi foto, musik, video, dokumen, dan kode.</p>
+
+ <div class="grid">
+  <section class="card">
+   <h2>☁️ Upload File</h2>
+   <div class="upload">
+    <div style="font-size:40px">📁</div>
+    <p>Pilih file yang ingin dibagikan</p>
+    <label class="pick" for="picker">Pilih File</label>
+    <input type="file" id="picker" multiple>
+   </div>
+   <h3>File tersedia</h3>
+   <div id="files">Belum ada file.</div>
   </section>
-  <div class="layout">
-    <div>
-      <section class="card">
-        <div class="chart-head">
-          <div><div class="coin-title" id="chartName">₿ Bitcoin <small>BTC/IDR</small></div><div class="price" id="chartPrice">Rp1.050.000.000</div><div class="change positive" id="chartChange">+0.00%</div></div>
-          <div class="timebuttons"><button class="active" onclick="setRange('1H',this)">1H</button><button onclick="setRange('4H',this)">4H</button><button onclick="setRange('1D',this)">1D</button><button onclick="setRange('1W',this)">1W</button></div>
-        </div>
-        <canvas id="chart"></canvas>
-      </section>
-      <section class="card market" id="market">
-        <div class="section-title">Market</div>
-        <div style="overflow-x:auto"><table><thead><tr><th>Pair</th><th>Harga</th><th>24h</th><th>Market</th></tr></thead><tbody id="marketRows"></tbody></table></div>
-      </section>
-      <section class="card history">
-        <div class="section-title">Riwayat Transaksi</div>
-        <div style="overflow-x:auto"><table><thead><tr><th>Waktu</th><th>Pair</th><th>Tipe</th><th>Jumlah</th><th>Total</th></tr></thead><tbody id="historyRows"><tr><td colspan="5" class="empty">Belum ada transaksi</td></tr></tbody></table></div>
-      </section>
-    </div>
-    <aside>
-      <section class="card">
-        <div class="trade-tabs"><button id="buyTab" class="active buy" onclick="setSide('buy')">BUY / BELI</button><button id="sellTab" onclick="setSide('sell')">SELL / JUAL</button></div>
-        <div class="section-title" id="tradeTitle">Beli aset</div>
-        <label>Pilih aset</label>
-        <div class="inputwrap"><select id="coinSelect" onchange="selectCoin(this.value)" style="background:transparent;color:var(--text);border:0;outline:0;width:100%;padding:12px 0"><option value="BTC">Bitcoin (BTC)</option><option value="ETH">Ethereum (ETH)</option><option value="SOL">Solana (SOL)</option><option value="BNB">BNB</option><option value="DOGE">Dogecoin (DOGE)</option></select></div>
-        <label>Harga saat ini</label><div class="inputwrap"><input id="tradePrice" readonly><span>IDR</span></div>
-        <label>Jumlah transaksi (IDR)</label><div class="inputwrap"><input id="amount" type="number" min="1000" step="1000" placeholder="Masukkan nominal"><span>IDR</span></div>
-        <div class="quick"><button onclick="quickAmount(.25)">25%</button><button onclick="quickAmount(.5)">50%</button><button onclick="quickAmount(.75)">75%</button><button onclick="quickAmount(1)">100%</button></div>
-        <div class="summary"><span>Estimasi jumlah aset</span><strong id="estimate">0</strong></div>
-        <div class="summary"><span>Biaya simulasi (0.1%)</span><strong id="fee">Rp0</strong></div>
-        <div class="summary"><span>Total</span><strong id="grandTotal">Rp0</strong></div>
-        <button id="tradeButton" class="trade-submit buy" onclick="executeTrade()">BELI <span id="buttonCoin">BTC</span></button>
-        <div class="notice">Ini hanya simulator edukasi. Harga bergerak secara acak dan bukan harga pasar real-time. Tidak ada uang atau aset sungguhan yang digunakan.</div>
-      </section>
-      <section class="card" id="portfolio" style="margin-top:14px">
-        <div class="section-title">Portfolio Saya</div>
-        <div id="portfolioRows" class="empty">Belum memiliki aset</div>
-      </section>
-    </aside>
-  </div>
+
+  <section class="card">
+   <h2>💬 Pesan & Kode</h2>
+   <input id="sender" placeholder="Nama pengirim">
+   <textarea id="message" rows="6" placeholder="Tulis pesan atau tempel kode di sini..."></textarea>
+   <button onclick="sendMessage()">Kirim Pesan</button>
+   <h3>Pesan terbaru</h3>
+   <div id="messages">Belum ada pesan.</div>
+  </section>
+ </div>
 </main>
+
 <script>
-const initialCash=100000000;
-const coins={
- BTC:{name:"Bitcoin",symbol:"BTC",icon:"₿",price:1050000000,change:1.24},
- ETH:{name:"Ethereum",symbol:"ETH",icon:"◆",price:56000000,change:2.18},
- SOL:{name:"Solana",symbol:"SOL",icon:"◎",price:2450000,change:-1.12},
- BNB:{name:"BNB",symbol:"BNB",icon:"◆",price:9800000,change:.67},
- DOGE:{name:"Dogecoin",symbol:"DOGE",icon:"Ð",price:2750,change:-.54}
+const picker=document.getElementById('picker');
+const files=document.getElementById('files');
+const messages=document.getElementById('messages');
+
+let uploaded=[];
+
+picker.onchange=()=>{
+ [...picker.files].forEach(file=>{
+  const url=URL.createObjectURL(file);
+  uploaded.push({file,url});
+ });
+ renderFiles();
+ picker.value='';
 };
-let cash=initialCash, holdings={}, transactions=[], selected="BTC", side="buy", baseValue=initialCash, history=[], range="1H";
-const fmt=n=>"Rp"+Math.round(n).toLocaleString("id-ID");
-const qty=n=>Number(n).toLocaleString("id-ID",{maximumFractionDigits:8});
-function valueOfHoldings(){return Object.entries(holdings).reduce((s,[k,v])=>s+v*coins[k].price,0)}
-function update(){
- const total=cash+valueOfHoldings(), pnl=total-initialCash, pct=pnl/initialCash*100;
- document.getElementById("total").textContent=fmt(total);document.getElementById("cash").textContent=fmt(cash);
- const p=document.getElementById("pnl");p.textContent=(pnl>=0?"+":"")+fmt(pnl)+" ("+(pct>=0?"+":"")+pct.toFixed(2)+"%)";p.className="stat-value "+(pnl>=0?"positive":"negative");
- document.getElementById("assetCount").textContent=Object.values(holdings).filter(v=>v>0).length;
- renderMarket();renderPortfolio();updateTrade();
+
+function renderFiles(){
+ files.innerHTML='';
+ uploaded.forEach(item=>{
+  const f=item.file;
+  const div=document.createElement('div');
+  div.className='file';
+
+  const info=document.createElement('div');
+  info.className='fileinfo';
+  info.innerHTML='<b></b><br><small style="color:#91a2bd"></small>';
+  info.querySelector('b').textContent=f.name;
+  info.querySelector('small').textContent=(f.size/1024/1024).toFixed(2)+' MB';
+
+  const link=document.createElement('a');
+  link.href=item.url;
+  link.download=f.name;
+  link.textContent='⬇ Download';
+
+  div.append(info,link);
+
+  if(f.type.startsWith('image/')){
+   const img=document.createElement('img');
+   img.src=item.url;
+   img.className='preview';
+   div.append(img);
+  }
+
+  if(f.type.startsWith('audio/')){
+   const audio=document.createElement('audio');
+   audio.src=item.url;
+   audio.controls=true;
+   audio.style.width='100%';
+   div.append(audio);
+  }
+
+  if(f.type.startsWith('video/')){
+   const video=document.createElement('video');
+   video.src=item.url;
+   video.controls=true;
+   video.className='preview';
+   div.append(video);
+  }
+
+  files.append(div);
+ });
 }
-function renderMarket(){
- document.getElementById("marketRows").innerHTML=Object.keys(coins).map(k=>{let c=coins[k];return `<tr onclick="selectCoin('${k}')"><td><div class="asset"><span class="coin-icon">${c.icon}</span><span>${c.name}<small>${k}/IDR</small></span></div></td><td>${fmt(c.price)}</td><td class="${c.change>=0?'positive':'negative'}">${c.change>=0?'+':''}${c.change.toFixed(2)}%</td><td>—</td></tr>`}).join("");
+
+function sendMessage(){
+ const text=document.getElementById('message').value.trim();
+ const name=document.getElementById('sender').value.trim()||'Pengunjung';
+ if(!text)return;
+
+ const box=document.createElement('div');
+ box.className='message';
+
+ const title=document.createElement('b');
+ title.textContent=name;
+
+ const content=document.createElement('pre');
+ content.textContent=text;
+ content.style.whiteSpace='pre-wrap';
+ content.style.overflowWrap='anywhere';
+
+ const copy=document.createElement('button');
+ copy.className='copy';
+ copy.textContent='Salin Pesan';
+ copy.onclick=async()=>{
+  await navigator.clipboard.writeText(text);
+  copy.textContent='Tersalin ✓';
+ };
+
+ box.append(title,content,copy);
+ messages.prepend(box);
+ document.getElementById('message').value='';
 }
-function renderPortfolio(){
- let entries=Object.entries(holdings).filter(([k,v])=>v>0.000000001);
- document.getElementById("portfolioRows").innerHTML=entries.length?entries.map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)"><div><b>${coins[k].icon} ${k}</b><div style="color:var(--muted);font-size:11px;margin-top:4px">${qty(v)} ${k}</div></div><b>${fmt(v*coins[k].price)}</b></div>`).join(""):'<div class="empty">Belum memiliki aset</div>';
-}
-function selectCoin(k){selected=k;document.getElementById("coinSelect").value=k;document.getElementById("chartName").innerHTML=coins[k].icon+" "+coins[k].name+" <small>"+k+"/IDR</small>";updateTrade();drawChart()}
-function setSide(s){side=s;document.getElementById("buyTab").className=s==="buy"?"active buy":"";document.getElementById("sellTab").className=s==="sell"?"active sell":"";document.getElementById("tradeButton").className="trade-submit "+s;document.getElementById("tradeTitle").textContent=s==="buy"?"Beli aset":"Jual aset";document.getElementById("tradeButton").innerHTML=(s==="buy"?"BELI ":"JUAL ")+`<span id="buttonCoin">${selected}</span>`;updateTrade()}
-function updateTrade(){
- const c=coins[selected], amount=Number(document.getElementById("amount").value)||0, fee=amount*.001;
- document.getElementById("chartPrice").textContent=fmt(c.price);document.getElementById("chartChange").textContent=(c.change>=0?"+":"")+c.change.toFixed(2)+"%";document.getElementById("chartChange").className="change "+(c.change>=0?"positive":"negative");
- document.getElementById("tradePrice").value=Math.round(c.price).toLocaleString("id-ID");document.getElementById("buttonCoin").textContent=selected;
- document.getElementById("estimate").textContent=qty(amount/c.price)+" "+selected;document.getElementById("fee").textContent=fmt(fee);document.getElementById("grandTotal").textContent=fmt(side==="buy"?amount+fee:amount-fee);
-}
-document.getElementById("amount").addEventListener("input",updateTrade);
-function quickAmount(r){let max=side==="buy"?cash/1.001:(holdings[selected]||0)*coins[selected].price;document.getElementById("amount").value=Math.floor(max*r);updateTrade()}
-function executeTrade(){
- const amount=Number(document.getElementById("amount").value), c=coins[selected], fee=amount*.001;
- if(!Number.isFinite(amount)||amount<1000){alert("Masukkan nominal minimal Rp1.000.");return}
- if(side==="buy"){
-  if(amount+fee>cash){alert("Saldo virtual tidak cukup.");return}
-  cash-=amount+fee;holdings[selected]=(holdings[selected]||0)+amount/c.price;
- }else{
-  const owned=holdings[selected]||0, proceeds=amount-fee;
-  if(amount>owned*c.price){alert("Jumlah melebihi aset yang kamu miliki.");return}
-  holdings[selected]=Math.max(0,owned-amount/c.price);cash+=proceeds;
- }
- transactions.unshift({time:new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}),coin:selected,side,qty:amount/c.price,total:side==="buy"?amount+fee:amount-fee});
- document.getElementById("amount").value="";renderHistory();update();
-}
-function renderHistory(){
- document.getElementById("historyRows").innerHTML=transactions.length?transactions.slice(0,20).map(t=>`<tr><td>${t.time}</td><td>${t.coin}/IDR</td><td class="${t.side==="buy"?"positive":"negative"}">${t.side.toUpperCase()}</td><td>${qty(t.qty)} ${t.coin}</td><td>${fmt(t.total)}</td></tr>`).join(""):'<tr><td colspan="5" class="empty">Belum ada transaksi</td></tr>';
-}
-function resetAccount(){if(!confirm("Reset saldo dan semua transaksi simulasi?"))return;cash=initialCash;holdings={};transactions=[];document.getElementById("amount").value="";renderHistory();update()}
-function setRange(r,el){range=r;document.querySelectorAll(".timebuttons button").forEach(b=>b.classList.remove("active"));el.classList.add("active");drawChart()}
-function drawChart(){
- const canvas=document.getElementById("chart"),ctx=canvas.getContext("2d"),dpr=window.devicePixelRatio||1,w=canvas.clientWidth,h=canvas.clientHeight;
- canvas.width=w*dpr;canvas.height=h*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);
- const vals=history.length?history.slice(-60):Array.from({length:60},(_,i)=>coins[selected].price*(.985+Math.sin(i/7)*.006+i*.0002));
- const min=Math.min(...vals)*.997,max=Math.max(...vals)*1.003, x=i=>i/(vals.length-1)*w, y=v=>h-((v-min)/(max-min))*h;
- ctx.strokeStyle="#29313b";ctx.lineWidth=1;for(let i=1;i<5;i++){let yy=h*i/5;ctx.beginPath();ctx.moveTo(0,yy);ctx.lineTo(w,yy);ctx.stroke()}
- ctx.beginPath();vals.forEach((v,i)=>i?ctx.lineTo(x(i),y(v)):ctx.moveTo(x(i),y(v)));ctx.lineWidth=2;ctx.strokeStyle="#0ecb81";ctx.stroke();
- ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();let grad=ctx.createLinearGradient(0,0,0,h);grad.addColorStop(0,"rgba(14,203,129,.2)");grad.addColorStop(1,"rgba(14,203,129,0)");ctx.fillStyle=grad;ctx.fill();
-}
-function tick(){
- Object.keys(coins).forEach(k=>{let c=coins[k],move=(Math.random()-.49)*.0022;c.price=Math.max(1,c.price*(1+move));c.change=Math.max(-99,Math.min(99,c.change+move*18));});
- history.push(coins[selected].price);if(history.length>100)history.shift();update();drawChart();
-}
-window.addEventListener("resize",drawChart);history=Array.from({length:60},(_,i)=>coins.BTC.price*(.985+Math.sin(i/7)*.006+i*.0002));update();drawChart();setInterval(tick,2500);
 </script>
 </body>
 </html>
