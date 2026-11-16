@@ -3,298 +3,170 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RBLX Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RBLX Finder</title>
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;background:#0b0d16;color:#fff;
+ margin:0;background:#090914;color:white;
  font-family:Arial,sans-serif;
 }
 header{
- padding:22px;background:#17152a;
- border-bottom:1px solid #40366b;
+ text-align:center;padding:30px 15px;
+ background:linear-gradient(135deg,#251344,#111020);
 }
-header h1{margin:0;color:#a78bfa}
-header p{color:#999;font-size:12px}
-.container{padding:16px;max-width:750px;margin:auto}
-.stats{
- display:grid;grid-template-columns:1fr 1fr;
- gap:12px;
-}
+header h1{color:#b99aff;margin:0}
+header p{color:#aaa;font-size:12px}
+main{max-width:550px;margin:auto;padding:20px}
 .card{
- background:#191b2b;border:1px solid #302b4c;
- border-radius:13px;padding:16px;margin-bottom:13px;
+ background:#191629;padding:18px;
+ border:1px solid #44336d;
+ border-radius:17px;margin-bottom:15px;
 }
-.stat{font-size:27px;color:#a78bfa;font-weight:bold}
-small{color:#aaa}
-h3{margin-top:0}
-input,textarea{
- width:100%;padding:12px;margin:6px 0;
- border:1px solid #38334f;border-radius:8px;
- background:#101321;color:white;
+input{
+ width:100%;padding:15px;
+ border-radius:10px;border:1px solid #6148a0;
+ background:#0c0c18;color:white;font-size:15px;
 }
 button{
- border:0;border-radius:8px;padding:11px 14px;
- background:#8062e9;color:white;font-weight:bold;
- margin:4px 2px;cursor:pointer;
+ width:100%;padding:14px;margin-top:10px;
+ background:#875cf5;color:white;
+ border:0;border-radius:10px;font-weight:bold;
 }
-.danger{background:#bd4259}
-.green{background:#168b70}
-.item{
- padding:12px;background:#25283b;
+#status{text-align:center;color:#aaa;padding:15px}
+.profile{display:none;text-align:center}
+.avatar{
+ width:125px;height:125px;
+ border-radius:20px;border:3px solid #a98aff;
+}
+.info{
+ background:#29243d;padding:13px;
  border-radius:9px;margin:8px 0;
  display:flex;justify-content:space-between;
- align-items:center;gap:8px;
+ gap:10px;
 }
-.item small{display:block;margin-top:5px}
-nav{
- display:flex;gap:7px;overflow:auto;
- padding:12px 16px;background:#111421;
-}
-nav button{white-space:nowrap}
-section{display:none}
-section.active{display:block}
+.info span{color:#b99aff}
+.actions{display:flex;gap:8px}
+.actions button{flex:1}
+.secondary{background:#38334b}
 </style>
 </head>
 <body>
 
 <header>
-<h1>⚡ RBLX DASHBOARD</h1>
-<p>UNIVERSAL ROBLOX CONTROL CENTER</p>
+<h1>✦ RBLX FINDER</h1>
+<p>ROBLOX PLAYER SEARCH SYSTEM</p>
 </header>
 
-<nav>
-<button onclick="show('home')">Home</button>
-<button onclick="show('players')">Players</button>
-<button onclick="show('games')">Games</button>
-<button onclick="show('maps')">Maps</button>
-<button onclick="show('achievements')">Achievements</button>
-<button onclick="show('settings')">Settings</button>
-</nav>
+<main>
+<div class="card">
+<h3>🔎 Cari Player Roblox</h3>
+<input id="username" placeholder="Masukkan username...">
+<button id="btn" onclick="searchPlayer()">SEARCH PLAYER</button>
+</div>
 
-<div class="container">
+<div id="status">Masukkan username Roblox.</div>
 
-<section id="home" class="active">
-<h2>Dashboard Overview</h2>
-<div class="stats">
-<div class="card">
-<small>Total Players</small>
-<div class="stat" id="s1">0</div>
-</div>
-<div class="card">
-<small>Total Games</small>
-<div class="stat" id="s2">0</div>
-</div>
-<div class="card">
-<small>Total Maps</small>
-<div class="stat" id="s3">0</div>
-</div>
-<div class="card">
-<small>Achievements</small>
-<div class="stat" id="s4">0</div>
-</div>
-</div>
-<div class="card">
-<h3>👋 Welcome Player!</h3>
-<p>Selamat datang di RBLX Dashboard.</p>
-<small>Semua data pribadi disimpan di browser.</small>
-</div>
-</section>
+<div class="card profile" id="profile">
+<img id="avatar" class="avatar">
+<h2 id="name"></h2>
+<p id="display" style="color:#b99aff"></p>
 
-<section id="players">
-<h2>👤 Player Database</h2>
-<div class="card">
-<input id="pn" placeholder="Nama pemain">
-<input id="pid" placeholder="Roblox User ID (opsional)">
-<button onclick="add('players',['pn','pid'])">+ Tambah Player</button>
-</div>
-<div class="card">
-<div id="playerList"></div>
-</div>
-</section>
+<div class="info"><span>USER ID</span><b id="uid"></b></div>
+<div class="info"><span>CREATED</span><b id="created"></b></div>
+<div class="info"><span>STATUS</span><b id="accountStatus"></b></div>
 
-<section id="games">
-<h2>🎮 Game Collection</h2>
-<div class="card">
-<input id="gn" placeholder="Nama game Roblox">
-<input id="gid" placeholder="Game ID (opsional)">
-<textarea id="gdesc" placeholder="Deskripsi game"></textarea>
-<button onclick="add('games',['gn','gid','gdesc'])">+ Simpan Game</button>
+<div class="actions">
+<button onclick="copyID()">COPY ID</button>
+<button class="secondary" onclick="openProfile()">PROFILE ↗</button>
 </div>
-<div class="card"><div id="gameList"></div></div>
-</section>
-
-<section id="maps">
-<h2>🗺️ Map Collection</h2>
-<div class="card">
-<input id="mn" placeholder="Nama map">
-<input id="mg" placeholder="Nama game">
-<textarea id="md" placeholder="Catatan map"></textarea>
-<button onclick="add('maps',['mn','mg','md'])">+ Simpan Map</button>
 </div>
-<div class="card"><div id="mapList"></div></div>
-</section>
-
-<section id="achievements">
-<h2>🏆 Achievements</h2>
-<div class="card">
-<input id="an" placeholder="Nama pencapaian">
-<textarea id="ad" placeholder="Deskripsi pencapaian"></textarea>
-<button onclick="add('achievements',['an','ad'])">+ Tambah Achievement</button>
-</div>
-<div class="card"><div id="achievementList"></div></div>
-</section>
-
-<section id="settings">
-<h2>⚙️ Settings & Backup</h2>
-<div class="card">
-<h3>Database Backup</h3>
-<button class="green" onclick="backup()">EXPORT DATA JSON</button>
-<button onclick="document.getElementById('importFile').click()">IMPORT DATA</button>
-<input type="file" id="importFile" accept=".json" hidden onchange="restore(event)">
-</div>
-<div class="card">
-<h3>Database Management</h3>
-<button class="danger" onclick="clearData()">RESET SEMUA DATA</button>
-</div>
-<div class="card">
-<small>RBLX Dashboard v1.0<br>Local Storage System<br>Offline Ready</small>
-</div>
-</section>
-
-</div>
+</main>
 
 <script>
-const keys=['players','games','maps','achievements'];
-let db={};
+let player=null;
 
-function load(){
- keys.forEach(k=>{
-  try{
-   db[k]=JSON.parse(localStorage.getItem('rblx_'+k))||[];
-   if(!Array.isArray(db[k]))db[k]=[];
-  }catch(e){db[k]=[]}
- });
- render();
-}
+async function searchPlayer(){
+ const username=document.getElementById('username').value.trim();
+ const status=document.getElementById('status');
+ const btn=document.getElementById('btn');
 
-function save(){
- keys.forEach(k=>{
-  localStorage.setItem('rblx_'+k,JSON.stringify(db[k]));
- });
- render();
-}
+ if(!username){
+  status.textContent='Masukkan username!';
+  return;
+ }
 
-function show(id){
- document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
- document.getElementById(id).classList.add('active');
-}
+ document.getElementById('profile').style.display='none';
+ btn.disabled=true;
+ status.textContent='⏳ Mencari pemain...';
 
-function add(type,ids){
- let values=ids.map(id=>document.getElementById(id).value.trim());
- if(!values[0])return alert('Isi nama terlebih dahulu!');
- db[type].push({
-  id:Date.now()+Math.random(),
-  values:values,
-  date:new Date().toLocaleDateString('id-ID')
- });
- ids.forEach(id=>document.getElementById(id).value='');
- save();
-}
+ try{
+  const r=await fetch(
+   'https://users.roblox.com/v1/users/search?keyword='+
+   encodeURIComponent(username)+'&limit=10'
+  );
+  if(!r.ok)throw Error();
+  const data=await r.json();
 
-function remove(type,id){
- if(!confirm('Hapus data ini?'))return;
- db[type]=db[type].filter(x=>x.id!==id);
- save();
-}
+  if(!data.data?.length){
+   status.textContent='Player tidak ditemukan!';
+   return;
+  }
 
-function edit(type,id){
- let item=db[type].find(x=>x.id===id);
- if(!item)return;
- let val=prompt('Edit nama:',item.values[0]);
- if(val===null || !val.trim())return;
- item.values[0]=val.trim();
- save();
-}
+  const p=data.data.find(
+   x=>x.name.toLowerCase()===username.toLowerCase()
+  )||data.data[0];
 
-function renderList(type,target){
- let el=document.getElementById(target);
- el.innerHTML='';
- db[type].forEach(item=>{
-  let div=document.createElement('div');
-  div.className='item';
-  let info=document.createElement('div');
-  let b=document.createElement('b');
-  b.textContent=item.values[0];
-  let small=document.createElement('small');
-  small.textContent=item.values.slice(1).filter(Boolean).join(' • ')+' | '+item.date;
-  info.append(b,small);
-  let actions=document.createElement('div');
-  let e=document.createElement('button');
-  e.textContent='Edit';
-  e.onclick=()=>edit(type,item.id);
-  let d=document.createElement('button');
-  d.textContent='X';
-  d.className='danger';
-  d.onclick=()=>remove(type,item.id);
-  actions.append(e,d);
-  div.append(info,actions);
-  el.append(div);
- });
- if(!db[type].length){
-  el.textContent='Belum ada data.';
+  const d=await fetch('https://users.roblox.com/v1/users/'+p.id);
+  if(!d.ok)throw Error();
+  player=await d.json();
+
+  const t=await fetch(
+   'https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+
+   player.id+'&size=150x150&format=Png'
+  );
+  if(!t.ok)throw Error();
+  const thumb=await t.json();
+
+  document.getElementById('avatar').src=
+   thumb.data?.[0]?.imageUrl||'';
+  document.getElementById('name').textContent=player.name;
+  document.getElementById('display').textContent=
+   '@'+player.displayName;
+  document.getElementById('uid').textContent=player.id;
+  document.getElementById('created').textContent=
+   new Date(player.created).toLocaleDateString('id-ID');
+  document.getElementById('accountStatus').textContent=
+   player.isBanned?'Banned':'Active';
+
+  document.getElementById('profile').style.display='block';
+  status.textContent='✅ Player ditemukan!';
+ }catch(e){
+  status.textContent='Gagal mencari. Periksa internet atau coba lagi.';
+ }finally{
+  btn.disabled=false;
  }
 }
 
-function render(){
- document.getElementById('s1').textContent=db.players.length;
- document.getElementById('s2').textContent=db.games.length;
- document.getElementById('s3').textContent=db.maps.length;
- document.getElementById('s4').textContent=db.achievements.length;
- renderList('players','playerList');
- renderList('games','gameList');
- renderList('maps','mapList');
- renderList('achievements','achievementList');
+function copyID(){
+ if(!player)return;
+ navigator.clipboard.writeText(String(player.id))
+ .then(()=>alert('ID berhasil disalin!'))
+ .catch(()=>alert('Gagal menyalin ID.'));
 }
 
-function backup(){
- let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
- let url=URL.createObjectURL(blob);
- let a=document.createElement('a');
- a.href=url;
- a.download='RBLX-Dashboard-Backup.json';
- a.click();
- URL.revokeObjectURL(url);
+function openProfile(){
+ if(player){
+  window.open(
+   'https://www.roblox.com/users/'+player.id+'/profile',
+   '_blank'
+  );
+ }
 }
 
-function restore(event){
- let file=event.target.files[0];
- if(!file)return;
- let reader=new FileReader();
- reader.onload=()=>{
-  try{
-   let data=JSON.parse(reader.result);
-   if(!data || !keys.every(k=>Array.isArray(data[k]) &&
-    data[k].every(x=>x && Array.isArray(x.values) &&
-    typeof x.values[0]==='string')))throw Error();
-   if(!confirm('Ganti database saat ini dengan backup?'))return;
-   keys.forEach(k=>db[k]=data[k]);
-   save();
-   alert('Database berhasil dipulihkan!');
-  }catch(e){alert('File backup tidak valid!')}
-  event.target.value='';
- };
- reader.readAsText(file);
-}
-
-function clearData(){
- if(!confirm('Yakin hapus semua database?'))return;
- keys.forEach(k=>db[k]=[]);
- save();
-}
-
-load();
+document.getElementById('username').addEventListener(
+ 'keydown',e=>{if(e.key==='Enter')searchPlayer()}
+);
 </script>
 </body>
 </html>
