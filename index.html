@@ -3,159 +3,219 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FILEHUB - File Sharing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RBLX Top Donasi Saver</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080d18;color:#eef3ff;font-family:Arial,sans-serif}
-header{padding:22px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #24314a}
-.logo{font-size:24px;font-weight:bold;letter-spacing:2px}
-.logo span{color:#5795ff}
-.status{color:#5ce0a0;font-size:12px}
-main{max-width:1100px;margin:40px auto;padding:0 18px}
-h1{font-size:42px;margin-bottom:8px}
-p{color:#91a2bd}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.card{background:#111a2b;border:1px solid #293954;border-radius:18px;padding:22px}
-.card h2{margin-top:0}
-.upload{border:2px dashed #49658d;border-radius:15px;padding:35px 15px;text-align:center;background:#152238}
-button,.pick{background:#5795ff;color:white;border:0;padding:12px 17px;border-radius:10px;font-weight:bold;cursor:pointer}
-input,textarea{width:100%;padding:13px;border:1px solid #344563;border-radius:10px;background:#0a1424;color:white;margin:8px 0}
-input[type=file]{display:none}
-.file{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #293954}
-.fileinfo{flex:1;min-width:0;overflow-wrap:anywhere}
-.file a{color:#79aaff;text-decoration:none}
-.message{background:#1b2940;border-radius:12px;padding:12px;margin:12px 0;overflow-wrap:anywhere}
-.copy{padding:7px 12px;margin-top:8px;background:#304667}
-.preview{max-width:100%;max-height:220px;border-radius:10px;margin-top:10px}
-@media(max-width:700px){.grid{grid-template-columns:1fr}h1{font-size:32px}main{margin:25px auto}header{padding:18px}}
+body{
+ margin:0;background:#10131d;color:white;
+ font-family:Arial,sans-serif;padding:20px;
+}
+.container{max-width:600px;margin:auto}
+h1{text-align:center;color:#8c7cff}
+.card{
+ background:#1c2130;padding:18px;
+ border-radius:15px;margin:15px 0;
+}
+input{
+ width:100%;padding:13px;margin:6px 0;
+ border:0;border-radius:8px;
+ background:#30384c;color:white;
+}
+button{
+ padding:11px;border:0;border-radius:8px;
+ background:#7765ff;color:white;
+ font-weight:bold;margin:4px;cursor:pointer;
+}
+.delete{background:#e44c64}
+.export{background:#159b75}
+.player{
+ background:#30384c;padding:13px;
+ border-radius:10px;margin:8px 0;
+ display:flex;justify-content:space-between;
+ align-items:center;gap:8px;
+}
+.rank{color:#b5aaff;font-weight:bold}
+.small{font-size:12px;color:#aaa}
 </style>
 </head>
 <body>
-<header>
- <div class="logo">FILE<span>HUB</span></div>
- <div class="status">● ONLINE</div>
-</header>
+<div class="container">
 
-<main>
- <h1>Share Anything.</h1>
- <p>Tempat berbagi foto, musik, video, dokumen, dan kode.</p>
+<h1>🎮 RBLX DATA SAVER</h1>
+<p style="text-align:center;color:#aaa">
+TOP DONASI DATABASE
+</p>
 
- <div class="grid">
-  <section class="card">
-   <h2>☁️ Upload File</h2>
-   <div class="upload">
-    <div style="font-size:40px">📁</div>
-    <p>Pilih file yang ingin dibagikan</p>
-    <label class="pick" for="picker">Pilih File</label>
-    <input type="file" id="picker" multiple>
-   </div>
-   <h3>File tersedia</h3>
-   <div id="files">Belum ada file.</div>
-  </section>
+<div class="card">
+<h3>➕ Tambah Pemain</h3>
+<input id="name" placeholder="Nama pemain Roblox">
+<input id="amount" type="number" placeholder="Jumlah donasi">
+<button onclick="addPlayer()">SIMPAN DATA</button>
+</div>
 
-  <section class="card">
-   <h2>💬 Pesan & Kode</h2>
-   <input id="sender" placeholder="Nama pengirim">
-   <textarea id="message" rows="6" placeholder="Tulis pesan atau tempel kode di sini..."></textarea>
-   <button onclick="sendMessage()">Kirim Pesan</button>
-   <h3>Pesan terbaru</h3>
-   <div id="messages">Belum ada pesan.</div>
-  </section>
- </div>
-</main>
+<div class="card">
+<h3>🏆 TOP DONASI</h3>
+<div id="players"></div>
+<p class="small" id="total"></p>
+</div>
+
+<div class="card">
+<h3>💾 Backup Database</h3>
+<button class="export" onclick="backup()">EXPORT JSON</button>
+<button onclick="document.getElementById('file').click()">IMPORT JSON</button>
+<input type="file" id="file" accept=".json"
+style="display:none" onchange="restore(event)">
+<p class="small">
+Data disimpan otomatis di browser ini.
+Simpan file backup agar tidak hilang jika data browser terhapus.
+</p>
+</div>
+
+</div>
 
 <script>
-const picker=document.getElementById('picker');
-const files=document.getElementById('files');
-const messages=document.getElementById('messages');
+let players = JSON.parse(
+ localStorage.getItem("rblx_players") || "[]"
+);
 
-let uploaded=[];
-
-picker.onchange=()=>{
- [...picker.files].forEach(file=>{
-  const url=URL.createObjectURL(file);
-  uploaded.push({file,url});
- });
- renderFiles();
- picker.value='';
-};
-
-function renderFiles(){
- files.innerHTML='';
- uploaded.forEach(item=>{
-  const f=item.file;
-  const div=document.createElement('div');
-  div.className='file';
-
-  const info=document.createElement('div');
-  info.className='fileinfo';
-  info.innerHTML='<b></b><br><small style="color:#91a2bd"></small>';
-  info.querySelector('b').textContent=f.name;
-  info.querySelector('small').textContent=(f.size/1024/1024).toFixed(2)+' MB';
-
-  const link=document.createElement('a');
-  link.href=item.url;
-  link.download=f.name;
-  link.textContent='⬇ Download';
-
-  div.append(info,link);
-
-  if(f.type.startsWith('image/')){
-   const img=document.createElement('img');
-   img.src=item.url;
-   img.className='preview';
-   div.append(img);
-  }
-
-  if(f.type.startsWith('audio/')){
-   const audio=document.createElement('audio');
-   audio.src=item.url;
-   audio.controls=true;
-   audio.style.width='100%';
-   div.append(audio);
-  }
-
-  if(f.type.startsWith('video/')){
-   const video=document.createElement('video');
-   video.src=item.url;
-   video.controls=true;
-   video.className='preview';
-   div.append(video);
-  }
-
-  files.append(div);
- });
+function save(){
+ localStorage.setItem(
+  "rblx_players",JSON.stringify(players)
+ );
+ render();
 }
 
-function sendMessage(){
- const text=document.getElementById('message').value.trim();
- const name=document.getElementById('sender').value.trim()||'Pengunjung';
- if(!text)return;
+function addPlayer(){
+ let name=document.getElementById("name").value.trim();
+ let amount=Number(document.getElementById("amount").value);
 
- const box=document.createElement('div');
- box.className='message';
+ if(!name || !Number.isFinite(amount) || amount<=0){
+  alert("Masukkan nama dan jumlah donasi!");
+  return;
+ }
 
- const title=document.createElement('b');
- title.textContent=name;
+ players.push({
+  id:Date.now()+Math.random(),
+  name:name,
+  amount:amount
+ });
 
- const content=document.createElement('pre');
- content.textContent=text;
- content.style.whiteSpace='pre-wrap';
- content.style.overflowWrap='anywhere';
+ document.getElementById("name").value="";
+ document.getElementById("amount").value="";
+ save();
+}
 
- const copy=document.createElement('button');
- copy.className='copy';
- copy.textContent='Salin Pesan';
- copy.onclick=async()=>{
-  await navigator.clipboard.writeText(text);
-  copy.textContent='Tersalin ✓';
+function editPlayer(id){
+ let p=players.find(x=>x.id===id);
+ if(!p)return;
+ let name=prompt("Nama pemain:",p.name);
+ if(name===null)return;
+ let amount=prompt("Jumlah donasi:",p.amount);
+ if(amount===null)return;
+ if(!name.trim() || !Number.isFinite(Number(amount)) || Number(amount)<=0){
+  alert("Data tidak valid!");
+  return;
+ }
+ p.name=name.trim();
+ p.amount=Number(amount);
+ save();
+}
+
+function deletePlayer(id){
+ if(!confirm("Hapus data pemain ini?"))return;
+ players=players.filter(x=>x.id!==id);
+ save();
+}
+
+function render(){
+ let box=document.getElementById("players");
+ let sorted=[...players].sort((a,b)=>b.amount-a.amount);
+
+ box.innerHTML="";
+
+ sorted.forEach((p,i)=>{
+  let div=document.createElement("div");
+  div.className="player";
+
+  let info=document.createElement("div");
+  let rank=document.createElement("span");
+  rank.className="rank";
+  rank.textContent="#"+(i+1)+" ";
+
+  let name=document.createElement("b");
+  name.textContent=p.name;
+
+  let amount=document.createElement("div");
+  amount.className="small";
+  amount.textContent="R$ "+p.amount.toLocaleString("id-ID");
+
+  info.append(rank,name,amount);
+
+  let actions=document.createElement("div");
+
+  let edit=document.createElement("button");
+  edit.textContent="Edit";
+  edit.onclick=()=>editPlayer(p.id);
+
+  let del=document.createElement("button");
+  del.textContent="X";
+  del.className="delete";
+  del.onclick=()=>deletePlayer(p.id);
+
+  actions.append(edit,del);
+  div.append(info,actions);
+  box.append(div);
+ });
+
+ document.getElementById("total").textContent=
+ "Total pemain tersimpan: "+players.length;
+}
+
+function backup(){
+ let blob=new Blob(
+  [JSON.stringify(players,null,2)],
+  {type:"application/json"}
+ );
+ let a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download="rblx-backup.json";
+ a.click();
+ URL.revokeObjectURL(a.href);
+}
+
+function restore(event){
+ let file=event.target.files[0];
+ if(!file)return;
+
+ let reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   let data=JSON.parse(reader.result);
+   if(!Array.isArray(data) ||
+      !data.every(p=>
+       typeof p.name==="string" &&
+       Number.isFinite(p.amount) &&
+       p.amount>0
+      )){
+    throw Error();
+   }
+   players=data.map(p=>({
+    id:Date.now()+Math.random(),
+    name:p.name,
+    amount:p.amount
+   }));
+   save();
+   alert("Database berhasil dipulihkan!");
+  }catch(e){
+   alert("File backup tidak valid!");
+  }
+  event.target.value="";
  };
-
- box.append(title,content,copy);
- messages.prepend(box);
- document.getElementById('message').value='';
+ reader.readAsText(file);
 }
+
+render();
 </script>
 </body>
 </html>
