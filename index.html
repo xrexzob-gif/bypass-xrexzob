@@ -3,7 +3,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RBLX Finder</title>
 <style>
 *{box-sizing:border-box}
@@ -12,43 +12,53 @@ body{
  font-family:Arial,sans-serif;
 }
 header{
- text-align:center;padding:30px 15px;
- background:linear-gradient(135deg,#251344,#111020);
+ padding:28px;text-align:center;
+ background:linear-gradient(135deg,#302052,#111020);
 }
 header h1{color:#b99aff;margin:0}
 header p{color:#aaa;font-size:12px}
-main{max-width:550px;margin:auto;padding:20px}
+main{max-width:550px;margin:auto;padding:18px}
 .card{
  background:#191629;padding:18px;
- border:1px solid #44336d;
- border-radius:17px;margin-bottom:15px;
+ border:1px solid #493875;border-radius:16px;
+ margin-bottom:15px;
 }
 input{
- width:100%;padding:15px;
- border-radius:10px;border:1px solid #6148a0;
- background:#0c0c18;color:white;font-size:15px;
+ width:100%;padding:14px;margin:7px 0;
+ border:1px solid #59458a;border-radius:10px;
+ background:#0e0d1b;color:white;font-size:15px;
 }
 button{
- width:100%;padding:14px;margin-top:10px;
- background:#875cf5;color:white;
- border:0;border-radius:10px;font-weight:bold;
+ padding:13px;border:0;border-radius:9px;
+ background:#855cf5;color:white;font-weight:bold;
+ cursor:pointer;
 }
-#status{text-align:center;color:#aaa;padding:15px}
-.profile{display:none;text-align:center}
+.searchbtn{width:100%;margin-top:10px}
+#status{text-align:center;color:#aaa;padding:12px}
+.result{
+ background:#29243e;padding:12px;
+ border-radius:12px;margin:10px 0;
+ display:flex;align-items:center;gap:12px;
+ cursor:pointer;
+}
+.result img{
+ width:65px;height:65px;border-radius:12px;
+}
+.result small{display:block;color:#aaa;margin-top:5px}
+.profile{text-align:center;display:none}
 .avatar{
- width:125px;height:125px;
- border-radius:20px;border:3px solid #a98aff;
+ width:130px;height:130px;object-fit:cover;
+ border:3px solid #a98aff;border-radius:22px;
 }
 .info{
- background:#29243d;padding:13px;
- border-radius:9px;margin:8px 0;
  display:flex;justify-content:space-between;
- gap:10px;
+ gap:10px;background:#29243e;padding:13px;
+ border-radius:9px;margin:8px 0;
 }
 .info span{color:#b99aff}
 .actions{display:flex;gap:8px}
 .actions button{flex:1}
-.secondary{background:#38334b}
+.secondary{background:#39334e}
 </style>
 </head>
 <body>
@@ -60,22 +70,21 @@ button{
 
 <main>
 <div class="card">
-<h3>🔎 Cari Player Roblox</h3>
-<input id="username" placeholder="Masukkan username...">
-<button id="btn" onclick="searchPlayer()">SEARCH PLAYER</button>
+<h3>🔎 Find Player</h3>
+<input id="query" placeholder="Username atau User ID Roblox">
+<button class="searchbtn" id="btn" onclick="search()">SEARCH PLAYER</button>
 </div>
 
-<div id="status">Masukkan username Roblox.</div>
+<div id="status">Masukkan username atau User ID.</div>
+<div id="results"></div>
 
 <div class="card profile" id="profile">
 <img id="avatar" class="avatar">
 <h2 id="name"></h2>
 <p id="display" style="color:#b99aff"></p>
-
 <div class="info"><span>USER ID</span><b id="uid"></b></div>
 <div class="info"><span>CREATED</span><b id="created"></b></div>
 <div class="info"><span>STATUS</span><b id="accountStatus"></b></div>
-
 <div class="actions">
 <button onclick="copyID()">COPY ID</button>
 <button class="secondary" onclick="openProfile()">PROFILE ↗</button>
@@ -84,88 +93,136 @@ button{
 </main>
 
 <script>
-let player=null;
+let currentPlayer=null;
 
-async function searchPlayer(){
- const username=document.getElementById('username').value.trim();
+async function api(url){
+ const r=await fetch(url);
+ if(!r.ok)throw Error('HTTP '+r.status);
+ return r.json();
+}
+
+async function search(){
+ const q=document.getElementById('query').value.trim();
  const status=document.getElementById('status');
+ const results=document.getElementById('results');
+ const profile=document.getElementById('profile');
  const btn=document.getElementById('btn');
 
- if(!username){
-  status.textContent='Masukkan username!';
-  return;
- }
+ if(!q){status.textContent='Masukkan username atau ID!';return;}
 
- document.getElementById('profile').style.display='none';
  btn.disabled=true;
- status.textContent='⏳ Mencari pemain...';
+ results.innerHTML='';
+ profile.style.display='none';
+ status.textContent='⏳ Sedang mencari...';
 
  try{
-  const r=await fetch(
-   'https://users.roblox.com/v1/users/search?keyword='+
-   encodeURIComponent(username)+'&limit=10'
-  );
-  if(!r.ok)throw Error();
-  const data=await r.json();
+  let users=[];
 
-  if(!data.data?.length){
-   status.textContent='Player tidak ditemukan!';
+  if(/^\d+$/.test(q)){
+   const p=await api('https://users.roblox.com/v1/users/'+q);
+   users=[p];
+  }else{
+   const data=await api(
+    'https://users.roblox.com/v1/users/search?keyword='+
+    encodeURIComponent(q)+'&limit=10'
+   );
+   users=data.data||[];
+  }
+
+  if(!users.length){
+   status.textContent='❌ Pemain tidak ditemukan.';
    return;
   }
 
-  const p=data.data.find(
-   x=>x.name.toLowerCase()===username.toLowerCase()
-  )||data.data[0];
+  status.textContent='Ditemukan '+users.length+' pemain.';
 
-  const d=await fetch('https://users.roblox.com/v1/users/'+p.id);
-  if(!d.ok)throw Error();
-  player=await d.json();
+  users.forEach(p=>{
+   const div=document.createElement('div');
+   div.className='result';
 
-  const t=await fetch(
-   'https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+
-   player.id+'&size=150x150&format=Png'
-  );
-  if(!t.ok)throw Error();
-  const thumb=await t.json();
+   const img=document.createElement('img');
+   img.alt='Avatar';
+   img.src='https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+
+    p.id+'&size=150x150&format=Png&isCircular=false';
 
-  document.getElementById('avatar').src=
-   thumb.data?.[0]?.imageUrl||'';
-  document.getElementById('name').textContent=player.name;
-  document.getElementById('display').textContent=
-   '@'+player.displayName;
-  document.getElementById('uid').textContent=player.id;
-  document.getElementById('created').textContent=
-   new Date(player.created).toLocaleDateString('id-ID');
-  document.getElementById('accountStatus').textContent=
-   player.isBanned?'Banned':'Active';
+   // Thumbnail endpoint mengembalikan JSON, ambil URL gambarnya.
+   loadAvatar(p.id,img);
 
-  document.getElementById('profile').style.display='block';
-  status.textContent='✅ Player ditemukan!';
+   const info=document.createElement('div');
+   const b=document.createElement('b');
+   b.textContent=p.displayName||p.name;
+   const small=document.createElement('small');
+   small.textContent='@'+p.name+' • ID: '+p.id;
+   info.append(b,small);
+   div.append(img,info);
+   div.onclick=()=>details(p.id);
+   results.append(div);
+  });
+
  }catch(e){
-  status.textContent='Gagal mencari. Periksa internet atau coba lagi.';
+  status.textContent='Gagal: '+e.message;
  }finally{
   btn.disabled=false;
  }
 }
 
-function copyID(){
- if(!player)return;
- navigator.clipboard.writeText(String(player.id))
- .then(()=>alert('ID berhasil disalin!'))
- .catch(()=>alert('Gagal menyalin ID.'));
+async function loadAvatar(id,img){
+ try{
+  const d=await api(
+   'https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+
+   id+'&size=150x150&format=Png&isCircular=false'
+  );
+  img.src=d.data?.[0]?.imageUrl||'';
+ }catch(e){}
 }
 
-function openProfile(){
- if(player){
-  window.open(
-   'https://www.roblox.com/users/'+player.id+'/profile',
-   '_blank'
+async function details(id){
+ const status=document.getElementById('status');
+ status.textContent='⏳ Mengambil profil...';
+
+ try{
+  const p=await api('https://users.roblox.com/v1/users/'+id);
+  currentPlayer=p;
+
+  const thumb=await api(
+   'https://thumbnails.roblox.com/v1/users/avatar?userIds='+
+   id+'&size=420x420&format=Png&isCircular=false'
   );
+
+  document.getElementById('avatar').src=
+   thumb.data?.[0]?.imageUrl||'';
+  document.getElementById('name').textContent=p.name;
+  document.getElementById('display').textContent='@'+p.displayName;
+  document.getElementById('uid').textContent=p.id;
+  document.getElementById('created').textContent=
+   new Date(p.created).toLocaleDateString('id-ID');
+  document.getElementById('accountStatus').textContent=
+   p.isBanned?'Banned':'Active';
+
+  document.getElementById('profile').style.display='block';
+  status.textContent='✅ Profil ditemukan!';
+ }catch(e){
+  status.textContent='Gagal mengambil detail profil.';
  }
 }
 
-document.getElementById('username').addEventListener(
- 'keydown',e=>{if(e.key==='Enter')searchPlayer()}
+function copyID(){
+ if(currentPlayer){
+  navigator.clipboard.writeText(String(currentPlayer.id))
+  .then(()=>alert('User ID disalin!'))
+  .catch(()=>alert('Gagal menyalin ID.'));
+ }
+}
+
+function openProfile(){
+ if(currentPlayer){
+  window.open('https://www.roblox.com/users/'+
+   currentPlayer.id+'/profile','_blank');
+ }
+}
+
+document.getElementById('query').addEventListener(
+ 'keydown',e=>{if(e.key==='Enter')search()}
 );
 </script>
 </body>
