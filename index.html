@@ -2,330 +2,75 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080b14">
-<title>xrexzob developer</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080d18">
+<title>ZOB MP3 DOWNLOADER</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:#080b14;color:#fff;font-family:Inter,sans-serif;overflow-x:hidden}
-a{text-decoration:none;color:inherit}
-button,input,textarea{font:inherit}
-.bg-glow{position:fixed;width:400px;height:400px;border-radius:50%;filter:blur(150px);opacity:.2;pointer-events:none;z-index:-1}
-.glow1{background:#564aff;top:-150px;left:-100px}
-.glow2{background:#087fff;right:-150px;bottom:0}
-header{width:92%;max-width:1200px;height:75px;margin:18px auto;position:sticky;top:12px;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 25px;background:#111827bb;backdrop-filter:blur(20px);border:1px solid #ffffff16;border-radius:17px}
-.logo{font-size:19px;font-weight:800;letter-spacing:-1px}
-.logo span{color:#8c9eff}
-nav{display:flex;gap:30px}
-nav a{font-size:12px;color:#a4adc1;transition:.3s}
-nav a:hover{color:#fff}
-.nav-btn{background:#fff;color:#090d17;padding:12px 18px;border-radius:9px;font-size:11px;font-weight:800}
-.menu{display:none;background:none;border:0;color:white;font-size:24px}
-.hero{max-width:1200px;margin:auto;min-height:690px;padding:65px 30px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:30px}
-.tag{display:inline-block;padding:10px 15px;border:1px solid #8298ff55;background:#8298ff12;color:#aebeff;border-radius:30px;font-size:10px;letter-spacing:2px;margin-bottom:28px}
-h1{font-size:clamp(48px,7vw,85px);line-height:1;letter-spacing:-5px;font-weight:900}
-.gradient{background:linear-gradient(100deg,#779dff,#bb80ff,#68dfff);color:transparent;background-clip:text}
-.desc{max-width:440px;color:#909bad;font-size:13px;line-height:1.9;margin:27px 0}
-.actions{display:flex;gap:13px;flex-wrap:wrap}
-.btn{display:inline-block;padding:15px 21px;border-radius:11px;font-size:12px;font-weight:700;transition:.3s}
-.btn-primary{background:linear-gradient(120deg,#7199ff,#865cff);box-shadow:0 5px 35px #687aff40}
-.btn-outline{border:1px solid #ffffff25;color:#c4cce0}
-.btn:hover{transform:translateY(-4px)}
-.visual{height:440px;display:grid;place-items:center;position:relative;perspective:1000px}
-.object{width:180px;height:180px;position:relative;transform-style:preserve-3d;animation:float 6s ease-in-out infinite}
-.cube{position:absolute;inset:0;border-radius:35px;background:radial-gradient(circle at 30% 20%,#fff,#8c9eff 12%,#5743c7 45%,#10182d 85%);box-shadow:inset -20px -20px 35px #080d25,inset 10px 10px 25px #ffffff75,0 0 65px #788eff90;transform:rotateX(55deg) rotateZ(45deg)}
-.cube:after{content:"";position:absolute;inset:18px;border:1px solid #ffffff80;border-radius:25px}
-.ring{position:absolute;inset:-65px;border:1px solid #819bff90;border-radius:50%;transform:rotateX(65deg)}
-.ring2{inset:-95px -25px;border-color:#b68aff80;transform:rotateY(65deg)}
-.ball{position:absolute;width:17px;height:17px;border-radius:50%;background:#a6baff;box-shadow:0 0 30px #7d9dff}
-.ball1{top:-40px;right:5px}
-.ball2{bottom:-45px;left:5px}
-@keyframes float{0%,100%{transform:translateY(0) rotateY(-10deg)}50%{transform:translateY(-22px) rotateY(10deg)}}
-.section{max-width:1200px;margin:auto;padding:85px 30px}
-.heading{text-align:center;margin-bottom:45px}
-.heading small{color:#9aabff;font-size:10px;letter-spacing:3px}
-.heading h2{font-size:clamp(30px,5vw,45px);margin:15px 0}
-.heading p{color:#929bad;font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.card{background:linear-gradient(145deg,#171e30,#0e1421);border:1px solid #ffffff13;border-radius:20px;padding:30px;min-height:205px;transition:.3s}
-.card:hover{transform:translateY(-7px);border-color:#8099ff80}
-.icon{width:45px;height:45px;border-radius:13px;display:grid;place-items:center;background:#8298ff20;font-size:22px;margin-bottom:23px}
-.card h3{font-size:16px;margin-bottom:12px}
-.card p{font-size:12px;line-height:1.8;color:#929bad}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:25px}
-.stat{background:#111827;border:1px solid #ffffff12;padding:27px;border-radius:17px;text-align:center}
-.stat h3{font-size:30px}
-.stat p{font-size:10px;color:#929bad;margin-top:9px}
-.contact{max-width:850px;margin:30px auto 90px;padding:35px;border:1px solid #8197ff35;background:linear-gradient(135deg,#171b35,#101522);border-radius:22px}
-.contact h2{text-align:center;font-size:28px}
-.contact>p{text-align:center;color:#929bad;font-size:12px;margin:12px 0 25px}
-input,textarea{width:100%;padding:15px;margin-bottom:13px;border:1px solid #ffffff1b;border-radius:10px;background:#080d19;color:white;outline:none}
-input:focus,textarea:focus{border-color:#8098ff}
-textarea{height:110px;resize:vertical}
-.submit{width:100%;padding:15px;border:0;border-radius:10px;color:white;font-weight:700;background:linear-gradient(110deg,#7199ff,#885bff);cursor:pointer}
-.submit:disabled{opacity:.6;cursor:not-allowed}
-#status{text-align:center;font-size:12px;color:#aebeff;margin-top:15px;min-height:18px}
-#authStatus{text-align:center;font-size:12px;color:#aebeff;margin-top:15px;min-height:18px;line-height:1.6}
-#logoutBtn{background:linear-gradient(110deg,#4b5874,#303b55)}
-footer{border-top:1px solid #ffffff13;padding:28px 5%;display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px;color:#8a94a9;font-size:11px}
-footer strong{color:#fff}
-@media(max-width:750px){.hero{grid-template-columns:1fr;text-align:center;padding-top:80px}.hero h1{letter-spacing:-3px}.hero .desc{margin:25px auto}.actions{justify-content:center}.visual{height:350px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}}
-@media(max-width:600px){header{height:65px;padding:0 17px}nav{display:none;position:absolute;top:75px;left:0;width:100%;padding:25px;background:#111827;border-radius:13px;flex-direction:column}nav.active{display:flex}.menu{display:block}.nav-btn{display:none}.hero{padding:75px 20px 30px}.hero h1{font-size:55px}.section{padding:70px 20px}.contact{margin:20px 15px 70px;padding:24px}footer{justify-content:center;text-align:center}}
+:root{color-scheme:dark}*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:24px 16px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 0%,#173c55 0%,#0b1727 42%,#070b13 100%);font-family:Arial,sans-serif;color:#f4f8ff}
+main{width:min(100%,460px)}.head{text-align:center;margin-bottom:25px}
+.logo{width:68px;height:68px;margin:0 auto 15px;border-radius:22px;display:grid;place-items:center;font-size:32px;background:linear-gradient(135deg,#28ddc2,#397bff);box-shadow:0 10px 35px #1ecdbd44}
+h1{font-size:23px;letter-spacing:1.4px;margin:0}.head p{color:#91a8bd;font-size:13px;margin:9px 0}
+.panel{padding:23px;border:1px solid #263c50;background:#101c2b;border-radius:22px;box-shadow:0 24px 70px #0007}
+label{display:block;font-size:13px;color:#b7c8d8;margin:0 0 10px}
+input{width:100%;padding:16px 14px;border:1px solid #30485e;border-radius:12px;background:#091321;color:white;font-size:14px;outline:none}
+input:focus{border-color:#35cfc1;box-shadow:0 0 0 3px #35cfc122}
+button{width:100%;border:0;border-radius:12px;padding:16px;margin-top:14px;background:linear-gradient(90deg,#24cdb8,#3988ff);font-weight:800;font-size:15px;color:#06131d;cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}
+.status{min-height:22px;margin-top:15px;font-size:13px;color:#9db1c4;line-height:1.5}
+.download{display:none;text-decoration:none;text-align:center;padding:15px;border:1px solid #286e70;background:#102e35;color:#6df0d8;border-radius:12px;margin-top:12px;font-weight:bold}
+.foot{text-align:center;color:#71879b;font-size:11px;line-height:1.6;margin:17px 8px 0}
 </style>
 </head>
 <body>
-<div class="bg-glow glow1"></div>
-<div class="bg-glow glow2"></div>
-
-<header>
-<a href="#home" class="logo">xrexzob <span>developer</span></a>
-<nav id="nav">
-<a href="#home">Home</a><a href="#features">Features</a><a href="#about">About</a><a href="#account">Account</a><a href="#contact">Contact</a>
-</nav>
-<a href="#account" class="nav-btn">Login ↗</a>
-<button class="menu" onclick="toggleMenu()">☰</button>
-</header>
-
 <main>
-<div class="hero" id="home">
-<div>
-<div class="tag">✦ DIGITAL INNOVATION STUDIO</div>
-<h1>BUILD<br>YOUR <span class="gradient">FUTURE.</span></h1>
-<p class="desc">Welcome to xrexzob developer. Creating modern digital experiences with creativity, technology and innovation.</p>
-<div class="actions">
-<a href="#features" class="btn btn-primary">Explore Now ↗</a>
-<a href="#about" class="btn btn-outline">Discover More</a>
-</div>
-</div>
-<div class="visual"><div class="object">
-<div class="ring"></div><div class="ring ring2"></div><div class="cube"></div><div class="ball ball1"></div><div class="ball ball2"></div>
-</div></div>
-</div>
-
-<section class="section" id="features">
-<div class="heading"><small>OUR CAPABILITIES</small><h2>Ideas into Reality.</h2><p>Building digital experiences beyond expectations.</p></div>
-<div class="grid">
-<div class="card"><div class="icon">✧</div><h3>Modern Design</h3><p>Clean, elegant and futuristic interfaces for the digital world.</p></div>
-<div class="card"><div class="icon">⌘</div><h3>Web Development</h3><p>Responsive websites with modern technology and smooth interactions.</p></div>
-<div class="card"><div class="icon">◈</div><h3>Innovation</h3><p>Creative ideas transformed into unique digital products.</p></div>
-</div>
-</section>
-
-<section class="section" id="about">
-<div class="heading"><small>ABOUT THE STUDIO</small><h2>xrexzob developer</h2><p>Creativity meets technology.</p></div>
-<div class="stats">
-<div class="stat"><h3>3D</h3><p>FUTURISTIC DESIGN</p></div>
-<div class="stat"><h3>100%</h3><p>RESPONSIVE</p></div>
-<div class="stat"><h3>∞</h3><p>POSSIBILITIES</p></div>
-</div>
-</section>
-
-<section class="contact" id="account">
-<h2>Welcome Back.</h2>
-<p>Login atau buat akun xrexzob developer.</p>
-<form id="authForm">
-<input id="authEmail" type="email" placeholder="Email kamu" autocomplete="email" required>
-<input id="authPassword" type="password" placeholder="Password (minimal 6 karakter)" minlength="6" autocomplete="current-password" required>
-<button class="submit" id="loginBtn" type="submit">Login</button>
-<button class="submit" type="button" id="registerBtn" style="margin-top:10px">Buat Akun</button>
-<button class="submit" type="button" id="logoutBtn" style="display:none;margin-top:10px">Logout</button>
-<div id="authStatus" aria-live="polite">Belum login.</div>
-</form>
-</section>
-
-<section class="contact" id="contact">
-<h2>Let's Connect.</h2>
-<p>Kirim pesan ke xrexzob developer.</p>
-<form id="messageForm">
-<input id="nickname" maxlength="30" placeholder="Nama panggilan (opsional)">
-<textarea id="message" maxlength="500" placeholder="Tulis pesan kamu..." required></textarea>
-<button class="submit" id="submitBtn" type="submit">Send Message ↗</button>
-<div id="status" aria-live="polite"></div>
-</form>
-</section>
+ <header class="head">
+  <div class="logo">♫</div>
+  <h1>ZOB MP3 DOWNLOADER</h1>
+  <p>Tempel link • Convert • Download</p>
+ </header>
+ <section class="panel">
+  <label for="url">LINK AUDIO / VIDEO</label>
+  <input id="url" type="url" placeholder="Tempel link di sini..." autocomplete="off">
+  <button id="convert">CONVERT MP3</button>
+  <div class="status" id="status">Tempel tautan sumber yang mengizinkan pengunduhan.</div>
+  <a class="download" id="download" href="#" download>⬇ DOWNLOAD MP3</a>
+ </section>
+ <p class="foot">Antarmuka siap dihubungkan ke backend. Konversi URL membutuhkan server yang mendukung sumber tersebut dan memiliki izin untuk mengunduh/mengonversi audionya.</p>
 </main>
-
-<footer>
-<strong>xrexzob developer</strong>
-<span>© 2026 All Rights Reserved.</span>
-<span>Built for the future ✦</span>
-</footer>
-
 <script>
-function toggleMenu(){
-document.getElementById("nav").classList.toggle("active");
-}
-document.querySelectorAll("nav a").forEach(a=>{
-a.addEventListener("click",()=>{
-document.getElementById("nav").classList.remove("active");
+const input=document.getElementById('url');
+const button=document.getElementById('convert');
+const statusBox=document.getElementById('status');
+const downloadLink=document.getElementById('download');
+
+/* Setelah backend tersedia, ganti URL di bawah dengan alamat backend.
+   Backend menerima POST JSON: { "url": "..." }
+   Backend mengembalikan JSON: { "downloadUrl": "https://..." }
+*/
+const BACKEND_URL = "https://GANTI-DENGAN-URL-BACKEND-KAMU/api/convert";
+
+button.addEventListener('click', async () => {
+ const value=input.value.trim();
+ downloadLink.style.display='none';
+ if(!value){statusBox.textContent='Tempel link terlebih dahulu.';input.focus();return;}
+ try{new URL(value);}catch{statusBox.textContent='Format link tidak valid.';return;}
+ if(BACKEND_URL.includes('GANTI-DENGAN-URL-BACKEND-KAMU')){
+   statusBox.textContent='HTML sudah siap. Backend belum dipasang — nanti isi URL backend di kode ini.';
+   return;
+ }
+ button.disabled=true;button.textContent='MEMPROSES...';statusBox.textContent='Sedang memproses link...';
+ try{
+  const response=await fetch(BACKEND_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:value})});
+  if(!response.ok)throw new Error('Server mengembalikan error ('+response.status+').');
+  const result=await response.json();
+  if(!result.downloadUrl)throw new Error('Link hasil download tidak ditemukan.');
+  downloadLink.href=result.downloadUrl;downloadLink.style.display='block';
+  downloadLink.textContent='⬇ DOWNLOAD MP3';
+  statusBox.textContent='Selesai! Tekan tombol download.';
+ }catch(error){statusBox.textContent='Gagal: '+error.message;}
+ finally{button.disabled=false;button.textContent='CONVERT MP3';}
 });
-});
-</script>
-
-<!-- FIREBASE -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAVB9-qfnHRG-47AUCdGGFeXczgL3Puy2Y",
-  authDomain: "xrexzob-6b27f.firebaseapp.com",
-  databaseURL: "https://xrexzob-6b27f-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "xrexzob-6b27f",
-  storageBucket: "xrexzob-6b27f.firebasestorage.app",
-  messagingSenderId: "722415318582",
-  appId: "1:722415318582:web:ffb41b307aaea28ffc8a97",
-  measurementId: "G-6N472M5MZC"
-};
-
-const authForm = document.getElementById("authForm");
-const authEmail = document.getElementById("authEmail");
-const authPassword = document.getElementById("authPassword");
-const authStatus = document.getElementById("authStatus");
-const loginBtn = document.getElementById("loginBtn");
-const registerBtn = document.getElementById("registerBtn");
-const logoutBtn = document.getElementById("logoutBtn");
-
-function showAuthError(error) {
-  const messages = {
-    "auth/email-already-in-use": "Email ini sudah terdaftar. Coba login.",
-    "auth/invalid-email": "Format email tidak valid.",
-    "auth/weak-password": "Password terlalu lemah. Gunakan minimal 6 karakter.",
-    "auth/invalid-credential": "Email atau password salah, atau akun belum dibuat.",
-    "auth/user-not-found": "Akun belum ditemukan. Silakan buat akun dulu.",
-    "auth/wrong-password": "Password salah.",
-    "auth/too-many-requests": "Terlalu banyak percobaan. Coba lagi nanti.",
-    "auth/network-request-failed": "Koneksi internet bermasalah."
-  };
-  authStatus.textContent = messages[error.code] || "Terjadi kesalahan: " + error.message;
-}
-
-try {
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-
-  authForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = authEmail.value.trim();
-    const password = authPassword.value;
-    loginBtn.disabled = true;
-    loginBtn.textContent = "Memproses...";
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      authStatus.textContent = "Login berhasil!";
-    } catch (error) {
-      console.error(error);
-      showAuthError(error);
-    } finally {
-      loginBtn.disabled = false;
-      loginBtn.textContent = "Login";
-    }
-  });
-
-  registerBtn.addEventListener("click", async () => {
-    const email = authEmail.value.trim();
-    const password = authPassword.value;
-    if (!email) {
-      authStatus.textContent = "Masukkan email terlebih dahulu.";
-      authEmail.focus();
-      return;
-    }
-    if (password.length < 6) {
-      authStatus.textContent = "Password harus minimal 6 karakter.";
-      authPassword.focus();
-      return;
-    }
-    registerBtn.disabled = true;
-    registerBtn.textContent = "Membuat akun...";
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      authStatus.textContent = "Akun berhasil dibuat dan kamu sudah login!";
-    } catch (error) {
-      console.error(error);
-      showAuthError(error);
-    } finally {
-      registerBtn.disabled = false;
-      registerBtn.textContent = "Buat Akun";
-    }
-  });
-
-  logoutBtn.addEventListener("click", async () => {
-    logoutBtn.disabled = true;
-    try {
-      await signOut(auth);
-      authStatus.textContent = "Berhasil logout.";
-    } catch (error) {
-      console.error(error);
-      authStatus.textContent = "Logout gagal. Coba lagi.";
-    } finally {
-      logoutBtn.disabled = false;
-    }
-  });
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      authStatus.textContent = "Login sebagai: " + user.email;
-      loginBtn.style.display = "none";
-      registerBtn.style.display = "none";
-      logoutBtn.style.display = "block";
-      authPassword.value = "";
-    } else {
-      authStatus.textContent = "Belum login.";
-      loginBtn.style.display = "block";
-      registerBtn.style.display = "block";
-      logoutBtn.style.display = "none";
-    }
-  });
-
-  // Form Contact tetap menyimpan pesan ke Firestore seperti sebelumnya.
-  const statusText = document.getElementById("status");
-  const form = document.getElementById("messageForm");
-  const submitBtn = document.getElementById("submitBtn");
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const nickname = document.getElementById("nickname").value.trim();
-    const message = document.getElementById("message").value.trim();
-
-    if (message.length < 2 || message.length > 500) {
-      statusText.textContent = "Pesan harus 2-500 karakter.";
-      return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Sending...";
-    try {
-      await addDoc(collection(db, "messages"), {
-        nickname: nickname || "Anonymous",
-        message: message,
-        createdAt: serverTimestamp()
-      });
-      statusText.textContent = "Pesan berhasil dikirim!";
-      form.reset();
-    } catch (error) {
-      console.error(error);
-      statusText.textContent = "Gagal mengirim. Periksa Firestore Rules dan koneksi.";
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Send Message ↗";
-    }
-  });
-
-} catch (error) {
-  console.error(error);
-  document.getElementById("authStatus").textContent = "Firebase gagal terhubung. Periksa konfigurasi.";
-  document.getElementById("status").textContent = "Firebase gagal terhubung. Periksa konfigurasi.";
-}
 </script>
 </body>
 </html>
